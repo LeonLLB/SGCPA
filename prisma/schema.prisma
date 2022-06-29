@@ -1,0 +1,118 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model Docente {
+  id Int @id @default(autoincrement())
+  nombre String
+  apellido String
+  cedula Int @unique
+  correo String
+  telefono String
+  direccion String
+  cargaAcademica CargaAcademica[]
+  asesorDe Jurado[] @relation("docente")
+  metodologoDe Jurado[] @relation("metodologo")
+  academicoDe Jurado[] @relation("academico")
+  adicionalDe Jurado[] @relation("adicional")
+}
+
+model Estudiante {
+  id Int @id @default(autoincrement())
+  nombre String
+  apellido String
+  cedula Int @unique
+  correo String
+  telefono String
+  direccion String
+  pnf String
+  trayecto Int
+}
+
+model PNF {
+  id Int @id @default(autoincrement())
+  nombre String
+}
+
+model CargaAcademica {
+  id Int @id @default(autoincrement())
+  pnf String
+  trayecto Int
+  periodo String
+  docenteID Int
+  turno String
+  horario1 String
+  horario2 String?
+  proyectos Proyecto[]
+  aula Int
+  docente Docente @relation(fields:[docenteID],references:[id])
+}
+
+model Jurado {
+  id Int @id @default(autoincrement())
+  pnf String
+  trayecto Int
+  periodo String
+  asesorID Int
+  metodologoID Int?
+  academicoID Int?
+  adicionalID Int?
+  defensoresDe Defensa[]
+  asesor Docente @relation(name:"docente",fields:[asesorID],references:[id])
+  metodologo Docente? @relation(name:"metodologo",fields:[metodologoID],references:[id])
+  academico Docente? @relation(name:"academico",fields:[academicoID],references:[id])
+  adicional Docente? @relation(name:"adicional",fields:[adicionalID],references:[id])
+}
+
+model Defensa{
+  id Int @id @default(autoincrement())
+  pnf String
+  trayecto Int
+  periodo String
+  preDefensa DateTime
+  defensa DateTime
+  aula String
+  juradoID Int
+  jurado Jurado @relation(fields:[juradoID],references:[id])
+}
+
+model Proyecto {
+  id Int @id @default(autoincrement())
+  pnf String
+  trayecto Int
+  periodo String
+  cargaID Int
+  titulo String @unique
+  comunidad String
+  linea String
+  temaGenerador String
+  cdEntregado Boolean
+  ponderacion Ponderacion? 
+  fotos Fotos[]
+  cargaAcademica CargaAcademica @relation(fields:[cargaID],references:[id])
+}
+
+model Fotos {
+  id Int @id @default(autoincrement())
+  proyectoID Int
+  proyecto Proyecto @relation(fields:[proyectoID],references:[id])
+}
+
+model Ponderacion {
+  id Int @id @default(autoincrement())
+  proyectoID Int @unique
+  definicion String
+  proyecto Proyecto @relation(fields:[proyectoID],references:[id])
+}
+
+
+
+
