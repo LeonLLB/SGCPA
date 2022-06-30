@@ -72,6 +72,16 @@ body {
     to{opacity: 1;}
 }
 
+@keyframes opening-sidebar-body{
+    from{transform:  translateX(-13rem);}
+    to{transform: translateX(0rem);}
+}
+
+@keyframes opening-sidebar-group{
+    from{transform:  translateY(-4rem);opacity: 0;}
+    to{transform: translateY(0rem);opacity: 1;}
+}
+
 @keyframes closing-modal{
     from{opacity: 0.5;background-color: #4a5568;}
     to{opacity: 0;background-color: rgba(255,255,255,0);}
@@ -92,6 +102,22 @@ body {
 
 .opening-modal-body{
     animation: opening-modal-body 0.2s ease-in-out;
+}
+
+.opening-sidebar-body{
+    animation: opening-sidebar-body 0.3s ease-in-out;
+}
+
+.opening-sidebar{
+    animation: opening-modal 0.3s ease-in-out;
+}
+
+.opening-sidebar-group{
+    animation: opening-sidebar-group 0.3s ease-in-out;
+}
+
+.closing-sidebar{
+    animation: closing-modal 0.3s ease-in-out;
 }
 
 .closing-modal-body{

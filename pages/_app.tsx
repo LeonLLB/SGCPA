@@ -1,23 +1,30 @@
 import Head from 'next/head'
-import { Fragment, useEffect, useState } from 'react';
 
 import 'material-icons/iconfont/material-icons.css';
 import '../styles/tailwind.css';
-import Navbar from '../components/ui/Navbar';
+import Header from '../components/ui/Header';
+import { SidebarContext } from '../contexts/SidebarContext';
+import useElementAsyncTransition from '../hooks/useElementAsyncTransition';
+import Sidebar from '../components/ui/Sidebar';
 
 export default function MyApp({ Component, pageProps }) {
 
-  const [BlurBackdrop, setBlurBackdrop] = useState(false);  
+  const sidebarState = useElementAsyncTransition(300)
 
   return (
       <div className="flex flex-col scroll-smooth"> 
         <Head>
-          <title>Leonard's portfolio</title>
-          <link rel="shortcut icon" href="/LLB logo.svg" type="image/x-icon" />
+          <title>Sistema de Gestión y Control de Proyectos Académicos - SGCPA UTDFT Bcas</title>
+          {/* <link rel="shortcut icon" href="/LLB logo.svg" type="image/x-icon" /> */}
           <meta name="viewport" content="width=device-width, initial-scale=1" />
         </Head>
-        <Navbar/>
-        <div className='mt-24 md:mt-16 mx-8 scroll-smooth'>
+        <SidebarContext.Provider value={[sidebarState]}>
+          <Header/>
+          { sidebarState.Visible &&
+            <Sidebar closing={sidebarState.Closing} onClose={sidebarState.Interaction}/>
+          }
+        </SidebarContext.Provider>
+        <div className='mx-8 scroll-smooth'>
           <Component {...pageProps} />    
         </div>
       </div>
