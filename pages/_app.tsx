@@ -6,6 +6,7 @@ import Header from '../components/ui/Header';
 import { SidebarContext } from '../contexts/SidebarContext';
 import useElementAsyncTransition from '../hooks/useElementAsyncTransition';
 import Sidebar from '../components/ui/Sidebar';
+import {ToastContainer} from 'react-toastify'
 
 export default function MyApp({ Component, pageProps }) {
 
@@ -15,7 +16,7 @@ export default function MyApp({ Component, pageProps }) {
       <div className="flex flex-col scroll-smooth"> 
         <Head>
           <title>Sistema de Gestión y Control de Proyectos Académicos - SGCPA UTDFT Bcas</title>
-          {/* <link rel="shortcut icon" href="/LLB logo.svg" type="image/x-icon" /> */}
+            <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
           <meta name="viewport" content="width=device-width, initial-scale=1" />
         </Head>
         <SidebarContext.Provider value={[sidebarState]}>
@@ -27,6 +28,7 @@ export default function MyApp({ Component, pageProps }) {
         <div className='mx-8 scroll-smooth'>
           <Component {...pageProps} />    
         </div>
+        <ToastContainer/>
       </div>
   )
 }

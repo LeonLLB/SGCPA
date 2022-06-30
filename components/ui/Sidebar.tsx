@@ -38,7 +38,7 @@ const Sidebar = ({closing, onClose}) => {
 						{	estudiantesItemState.Visible &&
 							<SidebarGroupItemHeader closing={estudiantesItemState.Closing}>
 								<SidebarItem isActive={router.asPath === '/estudiantes'} icon="school" title="Listado" onClick={()=>{onSidebarItemClick("/estudiantes")}}/>
-								<SidebarItem isActive={router.asPath === '/estudiantes/añadir'} icon="add" title="Añadir" onClick={()=>{onSidebarItemClick("/")}}/>
+								<SidebarItem isActive={router.asPath === '/estudiantes/registrar'} icon="add" title="Añadir" onClick={()=>{onSidebarItemClick("/estudiantes/registrar")}}/>
 							</SidebarGroupItemHeader>
 						}
 						<SidebarItem isActive={router.asPath === '/docentes'} icon="person" title="Docentes" onClick={docentesItemState.Interaction}/>
