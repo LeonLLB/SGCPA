@@ -55,11 +55,11 @@ body {
 }
 
 .modal-container{
-    @apply flex flex-row items-center justify-center w-screen h-screen fixed top-0 left-0;
+    @apply z-[51] flex flex-row items-center justify-center w-screen h-screen fixed top-0 left-0;
 }
 
 .modal-background{
-    @apply transition-all duration-200 z-40 w-full h-screen fixed top-0 left-0 ;
+    @apply transition-all duration-200 z-50 w-full h-screen fixed top-0 left-0 ;
 }
 
 @keyframes opening-modal{
@@ -168,6 +168,10 @@ body {
     flex-direction: row;
     align-items: center;
     justify-content: center;
+}
+
+.td-pnf{
+    @apply border border-gray-500 px-4 py-2 text-gray-800
 }
 
 .field{

@@ -7,12 +7,14 @@ import { SidebarContext } from '../contexts/SidebarContext';
 import useElementAsyncTransition from '../hooks/useElementAsyncTransition';
 import Sidebar from '../components/ui/Sidebar';
 import {ToastContainer} from 'react-toastify'
+import 'react-toastify/dist/ReactToastify.css'
 
 export default function MyApp({ Component, pageProps }) {
 
   const sidebarState = useElementAsyncTransition(300)
 
   return (
+    <>
       <div className="flex flex-col scroll-smooth"> 
         <Head>
           <title>Sistema de Gestión y Control de Proyectos Académicos - SGCPA UTDFT Bcas</title>
@@ -28,7 +30,18 @@ export default function MyApp({ Component, pageProps }) {
         <div className='mx-8 scroll-smooth'>
           <Component {...pageProps} />    
         </div>
-        <ToastContainer/>
       </div>
+      <ToastContainer
+        position="top-center"
+        autoClose={4000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+      />    
+    </>
   )
 }

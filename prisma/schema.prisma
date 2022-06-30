@@ -34,12 +34,14 @@ model Estudiante {
   telefono String
   direccion String
   pnf String
+  proyectos Proyecto[]
   trayecto Int
 }
 
 model PNF {
   id Int @id @default(autoincrement())
-  nombre String
+  nombre String @unique
+  codigo String @unique
 }
 
 model CargaAcademica {
@@ -95,15 +97,9 @@ model Proyecto {
   linea String
   temaGenerador String
   cdEntregado Boolean
-  ponderacion Ponderacion? 
-  fotos Fotos[]
+  ponderacion Ponderacion?
+  integrantes Estudiante[]
   cargaAcademica CargaAcademica @relation(fields:[cargaID],references:[id])
-}
-
-model Fotos {
-  id Int @id @default(autoincrement())
-  proyectoID Int
-  proyecto Proyecto @relation(fields:[proyectoID],references:[id])
 }
 
 model Ponderacion {
