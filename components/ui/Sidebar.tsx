@@ -23,7 +23,6 @@ const Sidebar = ({closing, onClose}) => {
 
 	const onSidebarItemClick = (link : string) => {
     router.push(link)
-    console.log(router.asPath)
     onClose()
   }
 	
@@ -76,6 +75,7 @@ const Sidebar = ({closing, onClose}) => {
 						{	proyectosItemState.Visible &&
 							<SidebarGroupItemHeader closing={proyectosItemState.Closing}>
 								<SidebarItem isActive={router.asPath === '/proyectos'} icon="book" title="Listado" onClick={()=>{onSidebarItemClick("/proyectos")}}/>
+								<SidebarItem isActive={router.asPath === '/proyectos/comunidades'} icon="location_on" title="Comunidades abordadas" tiny={true} onClick={()=>{onSidebarItemClick("/proyectos")}}/>
 								<SidebarItem isActive={router.asPath === '/proyectos/añadir'} icon="add" title="Añadir" onClick={()=>{onSidebarItemClick("/")}}/>
 								<SidebarItem icon="picture_as_pdf" title="Generar PDF" tiny={true} />
 							</SidebarGroupItemHeader>
@@ -84,8 +84,7 @@ const Sidebar = ({closing, onClose}) => {
 						<SidebarItem isActive={router.asPath.includes('/administrativo')} icon="settings" title="Administrativo" onClick={adminItemState.Interaction}/>
             {	adminItemState.Visible &&
 							<SidebarGroupItemHeader closing={adminItemState.Closing}>
-								<SidebarItem icon="school" title="PNF"/>
-								<SidebarItem icon="school" title="Periodo"/>
+								<SidebarItem isActive={router.asPath === '/admin/pnf'} icon="school" title="PNF" onClick={()=>{onSidebarItemClick("/admin/pnf")}}/>
 								<SidebarItem icon="backup" title="Respaldo"/>
 							</SidebarGroupItemHeader>
 						}
