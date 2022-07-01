@@ -4,21 +4,23 @@ import FormError from "../../interfaces/formError"
 
 interface TrayectoSelectProps {
     onInputChange: (e:ChangeEvent)=>void,
-    onBlur: (e:any)=>void,
+    onBlur?: (e:any)=>void,
     value:string,
     className?: string,
     error: FormError,
+    isCol?: boolean,
+    label?: string,
     required:boolean
 }
 
-const TrayectoSelect: FC<TrayectoSelectProps> = ({error,required,onInputChange,value,className,onBlur}) => {
+const TrayectoSelect: FC<TrayectoSelectProps> = ({label = "Trayecto:",isCol=false,error,required,onInputChange,value,className,onBlur}) => {
   
     const trayectos = ['I','II','III','IV']
   
     return (
     <>
-        <span className="flex flex-row items-center justify-end space-x-2">
-            <label htmlFor="trayecto">Trayecto: </label>
+        <span className={`flex ${isCol?"flex-col":"flex-row"} items-center justify-end space-x-2`}>
+            <label htmlFor="trayecto">{label} </label>
             <div className="border border-gray-400 p-1 rounded-xl">
                 <select onBlur={onBlur} value={value} className={` font-serif h-full transition-colors duration-200 focus:border-2 focus:bg-gray-200 focus:border-blue-500 outline-none p-2 rounded-lg border-2 border-gray-400 bg-gray-300 focus:outline-none focus:shadow-outline ${className}`} onChange={onInputChange} name="trayecto" id="trayecto">
                     <option value="" disabled={required}></option>

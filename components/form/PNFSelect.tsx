@@ -4,20 +4,22 @@ import PNF from "../../interfaces/PNF"
 
 interface PNFSelectProps {
     onInputChange: (e:ChangeEvent)=>void,
-    onBlur: (e:any)=>void,
+    onBlur?: (e:any)=>void,
     pnfList: PNF[],
     value:string,
     className?: string,
     error: FormError,
+    isCol?: boolean,
+    label?: string,
     required:boolean
 }
 
-const PNFSelect: FC<PNFSelectProps> = ({error,pnfList,required,onInputChange,value,className,onBlur}) => {
+const PNFSelect: FC<PNFSelectProps> = ({label = "Programa Nacional de Formación:",isCol = false,error,pnfList,required,onInputChange,value,className,onBlur}) => {
   
     return (
     <>
-        <span className="flex flex-row items-center justify-end space-x-2">
-            <label htmlFor="pnf">Programa Nacional de Formación: </label>
+        <span className={`flex ${isCol?"flex-col":"flex-row"} items-center justify-end space-x-2`}>
+            <label htmlFor="pnf">{label}</label>
             
             <div className="border border-gray-400 p-1 rounded-xl">
                 <select onBlur={onBlur} value={value} className={` h-full transition-colors duration-200 focus:border-2 focus:bg-gray-200 focus:border-blue-500 outline-none p-2 rounded-lg border-2 border-gray-400 bg-gray-300 focus:outline-none focus:shadow-outline ${className}`} onChange={onInputChange} name="pnf" id="pnf">

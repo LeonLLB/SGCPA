@@ -4,20 +4,21 @@ import FormError from '../../interfaces/formError'
 interface FormInputProps {
     value: string,
     onInputChange: (event:ChangeEvent)=>void,
-    onBlur: (event)=>void,
+    onBlur?: (event)=>void,
     classNameContainer?:string,
     classNameLabel?:string,
     classNameInput?:string,
     errors: FormError,
     name: string,
     label: string,
+    isCol?:boolean,
     type: HTMLInputTypeAttribute,
 }
 
-const FormInput: FC<FormInputProps> = ({value,onInputChange,onBlur,classNameContainer,name,classNameInput,classNameLabel,errors,label,type}) => {
+const FormInput: FC<FormInputProps> = ({isCol = false,value,onInputChange,onBlur,classNameContainer,name,classNameInput,classNameLabel,errors,label,type}) => {
   return (
     <>
-      <div className={`${classNameContainer}  flex flex-row justify-end items-center space-x-4`}>
+      <div className={`${classNameContainer}  flex ${isCol?"flex-col":"flex-row"} justify-end items-center space-x-4`}>
           <label className={`${classNameLabel} `} htmlFor={name}>{label}</label>
           <div className='border border-gray-400 rounded-xl p-1'>
             <input type={type} onChange={onInputChange} onBlur={onBlur} name={name} id={name} className={`${classNameInput} transition-colors duration-200 focus:border-2 focus:bg-gray-200 focus:border-blue-500 outline-none p-2 rounded-lg border-2 border-gray-400 bg-gray-300`} value={value}/>
