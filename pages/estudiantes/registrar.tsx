@@ -1,7 +1,6 @@
-import { PrismaClient } from "@prisma/client";
 import { useRouter } from "next/router";
-import { ChangeEvent } from "react";
 import { toast } from "react-toastify";
+import prisma from "../../prismaClient";
 import PNFSelect from "../../components/form/PNFSelect";
 import TrayectoSelect from "../../components/form/TrayectoSelect";
 import FormInput from "../../components/ui/FormInput";
@@ -70,7 +69,24 @@ const AddEstudiante = (props) => {
   const onFormSubmit = (event) => {
     event.preventDefault()
     if(isItValid()){
-      console.log(Form)
+      const toastReference = toast.loading('Inscribiendo PNF...')
+			fetch('/api/estudiantes',{
+				method:'POST',
+				headers:{
+					'Content-Type':'application/json'
+				},
+				body:JSON.stringify(Form)
+			})
+			.then(res=>res.json())
+			.then(res=>{
+				if(res.isOk){
+					toast.update(toastReference,{closeButton:true,closeOnClick:true,render:res.result,type:'success',isLoading:false,autoClose:4000})
+          router.push('/estudiantes')
+				}
+				else{
+					toast.update(toastReference,{closeButton:true,closeOnClick:true,render:res.motive,type:'error',isLoading:false,autoClose:4000})
+				}
+			})
     }else{
       toast.error('El formulario no es valido, esta vació o faltan valores requeridos.')
     }
@@ -169,8 +185,6 @@ const AddEstudiante = (props) => {
 }
 
 export const getServerSideProps = async (context) =>{
-   
-  const prisma = new PrismaClient()
 
 	const listadoDeCarreras = await prisma.pNF.findMany()
 

@@ -1,7 +1,7 @@
 import { MouseEvent, useState } from "react";
 import { useRouter } from "next/router";
-import { PrismaClient } from "@prisma/client";
 import { toast } from "react-toastify";
+import prisma from "../../prismaClient";
 import FormInput from "../../components/ui/FormInput"
 import Modal from "../../components/ui/Modal"
 import useElementAsyncTransition from "../../hooks/useElementAsyncTransition"
@@ -188,8 +188,6 @@ const PNFMain = (props) => {
 }
 
 export const getServerSideProps = async (context) =>{
-	
-	const prisma = new PrismaClient()
 
 	const listadoDeCarreras = await prisma.pNF.findMany()
 
