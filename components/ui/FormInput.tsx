@@ -17,7 +17,9 @@ const FormInput: FC<FormInputProps> = ({value,onInputChange,onBlur,classNameCont
   return (
     <div className={`${classNameContainer}  flex flex-row justify-end items-center space-x-4`}>
         <label className={`${classNameLabel} `} htmlFor={name}>{label}</label>
-        <input type={type} onChange={onInputChange} onBlur={onBlur} name={name} id={name} className={`${classNameInput} transition-colors duration-200 focus:border-2 focus:bg-gray-200 focus:border-blue-500 outline-none p-2 rounded-lg border-2 border-gray-400 bg-gray-300`} value={value}/>
+        <div className='border border-gray-400 rounded-xl p-1'>
+          <input type={type} onChange={onInputChange} onBlur={onBlur} name={name} id={name} className={`${classNameInput} transition-colors duration-200 focus:border-2 focus:bg-gray-200 focus:border-blue-500 outline-none p-2 rounded-lg border-2 border-gray-400 bg-gray-300`} value={value}/>
+        </div>
     </div>
   )
 }

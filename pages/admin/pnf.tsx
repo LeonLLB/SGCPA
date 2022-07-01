@@ -105,7 +105,7 @@ const PNFMain = (props) => {
 			<div className="h-[95.25vh] flex flex-row items-center justify-center">
 				<div className="flex flex-col items-center space-y-4 justify-center">
 
-					<h2 className="text-lg font-semibold">Listado de Programas Nacionales de Formación</h2>
+					<h2>Listado de Programas Nacionales de Formación</h2>
 					<table className="w-full h-full text-center border-collapse border-2 border-gray-500">
 						<thead>
 							<tr>
@@ -159,8 +159,8 @@ const PNFMain = (props) => {
 							/>
 						</form>
 						<div className="flex flex-row space-x-5 w-full justify-end">
-							<button onClick={onFormSubmit} className="px-4 py-2 bg-blue-400 duration-300 border-2 border-blue-600 transition-colors hover:bg-blue-500 hover:border-blue-400 rounded-lg">Añadir</button>
-							<button onClick={modalState.Interaction} className="px-4 py-2 bg-gray-200 duration-300 border-2 border-blue-400 transition-colors hover:bg-gray-300 hover:border-blue-400 rounded-lg">Cancelar</button>	
+							<button onClick={onFormSubmit} className="btn-info-primary">Añadir</button>
+							<button onClick={modalState.Interaction} className="btn-info-secondary">Cancelar</button>	
 						</div>
 					</div>
 				</Modal>
@@ -175,8 +175,8 @@ const PNFMain = (props) => {
 						<span className="text-red-600 w-96">Esta seguro de querer eliminar esta carrera? Todos los proyectos relacionados con la misma permaneceran dentro de la base de datos.</span>
 							
 						<div className="flex flex-row space-x-5 w-full justify-end">
-							<button onClick={onPNFDelete} className="px-4 py-2 bg-red-400 duration-300 border-2 border-red-600 transition-colors hover:bg-red-500 hover:border-red-400 rounded-lg">Eliminar</button>
-							<button onClick={confirmModalState.Interaction} className="px-4 py-2 bg-gray-200 duration-300 border-2 border-red-400 transition-colors hover:bg-gray-300 hover:border-red-400 rounded-lg">Cancelar</button>	
+							<button onClick={onPNFDelete} className="btn-danger-primary">Eliminar</button>
+							<button onClick={confirmModalState.Interaction} className="btn-danger-secondary">Cancelar</button>	
 						</div>
 					</div>
 				</Modal>
