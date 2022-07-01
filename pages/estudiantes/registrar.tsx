@@ -1,5 +1,6 @@
 import { PrismaClient } from "@prisma/client";
 import { useRouter } from "next/router";
+import { ChangeEvent } from "react";
 import { toast } from "react-toastify";
 import PNFSelect from "../../components/form/PNFSelect";
 import TrayectoSelect from "../../components/form/TrayectoSelect";
@@ -9,19 +10,9 @@ import useValidate from "../../hooks/useValidate";
 
 const AddEstudiante = (props) => {
 
-  const [Form, onInputChange] = useForm({
-    nombre: "",
-    apellido: "",
-    cedula: "",
-    correo: "",
-    telefono: "",
-    direccion: "",
-    pnf: "",
-    trayecto: ""
-  })
-
+  
   const router = useRouter()
-
+  
   const {Errors,isItValid, validate} = useValidate({
     nombre: {
       required:true,
@@ -56,19 +47,32 @@ const AddEstudiante = (props) => {
       required:true
     },
     pnf: {
-      required:true
+      required:true,
+      minLength:1
     },
     trayecto: {
-      required:true
+      required:true,
+      minLength:1
     }
   })
 
+  const [Form, onInputChange] = useForm({
+    nombre: "",
+    apellido: "",
+    cedula: "",
+    correo: "",
+    telefono: "",
+    direccion: "",
+    pnf: "",
+    trayecto: ""
+  },(event)=>{validate(event)})
+  
   const onFormSubmit = (event) => {
     event.preventDefault()
     if(isItValid()){
       console.log(Form)
     }else{
-      toast.error('El formulario no es valido.')
+      toast.error('El formulario no es valido, esta vació o faltan valores requeridos.')
     }
   }
 
@@ -90,7 +94,7 @@ const AddEstudiante = (props) => {
                 value={Form.nombre} 
                 onInputChange={onInputChange}
                 onBlur={validate}
-                errors={[]}
+                errors={(Errors.nombre !== undefined || Errors.nombre !== null) ? Errors.nombre : null}
                 name="nombre"
                 label="Nombre:"
                 type="text"
@@ -99,7 +103,7 @@ const AddEstudiante = (props) => {
                 value={Form.apellido} 
                 onInputChange={onInputChange}
                 onBlur={validate}
-                errors={[]}
+                errors={(Errors.apellido !== undefined || Errors.apellido !== null) ? Errors.apellido : null}
                 name="apellido"
                 label="Apellido:"
                 type="text"
@@ -108,7 +112,7 @@ const AddEstudiante = (props) => {
                 value={Form.cedula} 
                 onInputChange={onInputChange}
                 onBlur={validate}
-                errors={[]}
+                errors={(Errors.cedula !== undefined || Errors.cedula !== null) ? Errors.cedula : null}
                 name="cedula"
                 label="Cedula:"
                 type="text"
@@ -117,7 +121,7 @@ const AddEstudiante = (props) => {
                 value={Form.correo} 
                 onInputChange={onInputChange}
                 onBlur={validate}
-                errors={[]}
+                errors={(Errors.correo !== undefined || Errors.correo !== null) ? Errors.correo : null}
                 name="correo"
                 label="Correo electronico:"
                 type="email"
@@ -126,7 +130,7 @@ const AddEstudiante = (props) => {
                 value={Form.direccion} 
                 onInputChange={onInputChange}
                 onBlur={validate}
-                errors={[]}
+                errors={(Errors.direccion !== undefined || Errors.direccion !== null) ? Errors.direccion : null}
                 name="direccion"
                 label="Dirección:"
                 type="text"
@@ -135,7 +139,7 @@ const AddEstudiante = (props) => {
                 value={Form.telefono} 
                 onInputChange={onInputChange}
                 onBlur={validate}
-                errors={[]}
+                errors={(Errors.telefono !== undefined || Errors.telefono !== null) ? Errors.telefono : null}
                 name="telefono"
                 label="Telefono:"
                 type="text"
@@ -145,12 +149,14 @@ const AddEstudiante = (props) => {
                 onInputChange={onInputChange}
                 onBlur={validate}
                 required={true}
+                error={(Errors.trayecto !== undefined || Errors.trayecto !== null) ? Errors.trayecto : null}
               />
               <PNFSelect
                 value={Form.pnf}
                 onInputChange={onInputChange}
                 onBlur={validate}
                 required={true}
+                error={(Errors.pnf !== undefined || Errors.pnf !== null) ? Errors.pnf : null}
                 pnfList={(props.listado !== null && props.listado?.length > 0) ? props.listado : []}
               />
               <div className="w-full flex flex-row justify-center !mt-7">

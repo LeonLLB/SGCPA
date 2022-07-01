@@ -15,20 +15,21 @@ const PNFMain = (props) => {
 	const [PNFID, setPNFID] = useState(0)
 	const router = useRouter()
 
-	const [Form, onInputChange,reset,changeForm] = useForm({
-    pnf: "",
-		codigo:"",
-  })
-
 	const {Errors,isItValid, validate} = useValidate({
-    pnf: {
-      required:true,
-    },
+		pnf: {
+			required:true,
+		},
 		codigo: {
-      required:true,
+			required:true,
 			maxLength:3
-    }
-  })
+		}
+	  })
+
+	const [Form, onInputChange,reset,changeForm] = useForm({
+    	pnf: "",
+		codigo:"",
+  	},(e)=>{validate(e)})
+
 
 	const onFormSubmit = (event: MouseEvent) => {
 		event.preventDefault()
@@ -143,7 +144,7 @@ const PNFMain = (props) => {
 								value={Form.pnf}
 								onInputChange={onPNFChange}
 								onBlur={validate}
-								errors={[]}
+								errors={(Errors.pnf !== undefined || Errors.pnf !== null) ? Errors.pnf : null}
 								name="pnf"
 								label="PNF:"
 								type="text"
@@ -152,7 +153,7 @@ const PNFMain = (props) => {
 								value={Form.codigo}
 								onInputChange={onInputChange}
 								onBlur={validate}
-								errors={[]}
+								errors={(Errors.codigo !== undefined || Errors.codigo !== null) ? Errors.codigo : null}
 								name="codigo"
 								label="Código del PNF:"
 								type="text"

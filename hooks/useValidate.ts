@@ -21,11 +21,14 @@ export interface FormDataInterface {
         comparable:any,
         comparableLabel:string
     },
-    minMaxWords?: number[]
+    minMaxWords?: {
+        state:boolean,
+        value:number[]
+    }
 }
 
 const useValidate = (FormData: any) => {
-    const [Errors, setErrors] = useState({})
+    const [Errors, setErrors] = useState<any>({})
     const ErrorSyncState = {
         value:{},
         setValue(state){
@@ -262,7 +265,13 @@ const useValidate = (FormData: any) => {
     }
 
     const isItValid = () => {
+
+        if(Object.values(Errors).length !== Object.values(FormData).length){
+            return false
+        }
+
         let isValid = false
+        
         Object.values(Errors).some((Error: FormDataInterface) => {
             if(
                 Error.required &&
@@ -270,7 +279,8 @@ const useValidate = (FormData: any) => {
                 Error.max?.state &&
                 Error.minLength?.state &&
                 Error.maxLength?.state &&
-                Error.regex?.state
+                Error.regex?.state &&
+                Error.minMaxWords?.state 
             ){
                 isValid = true
             }
