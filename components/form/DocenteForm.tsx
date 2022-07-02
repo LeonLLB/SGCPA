@@ -1,10 +1,10 @@
 import React from 'react'
 import FormInput from '../ui/FormInput'
-const DocenteForm = ({onFormSubmit,onInputChange,validate,Form,Errors}) => {
+const DocenteForm = ({onFormSubmit,onInputChange,validate,Form,Errors,isModForm=false}) => {
     return (
         <div className="h-[90vh] flex flex-row items-center justify-center">
             <div className="flex flex-col items-center justify-center space-y-4">
-                <h2>Inscribir un docente</h2>
+                <h2>{isModForm? "Modificar un docente" : "Inscribir un docente"}</h2>
                 <form onSubmit={onFormSubmit} className="bg-gray-200 p-5 space-y-2 border-2 border-gray-400 rounded-xl">
                   <FormInput 
                     value={Form.nombre} 
@@ -61,7 +61,7 @@ const DocenteForm = ({onFormSubmit,onInputChange,validate,Form,Errors}) => {
                     type="text"
                   />
                   <div className="w-full flex flex-row justify-center !mt-7">
-                    <button type="submit" className="btn-info-primary">Inscribir docente</button>
+                    <button type="submit" className="btn-info-primary">{isModForm? "Modificar docente" : "Inscribir docente"}</button>
                   </div>
                 </form>
             </div>

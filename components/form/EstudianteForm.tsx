@@ -3,11 +3,11 @@ import FormInput from '../ui/FormInput'
 import PNFSelect from './PNFSelect'
 import TrayectoSelect from './TrayectoSelect'
 
-const EstudianteForm = ({onFormSubmit,onInputChange,validate,Form,Errors,listado}) => {
+const EstudianteForm = ({onFormSubmit,onInputChange,validate,Form,Errors,listado,isModForm=false}) => {
     return (
         <div className="h-[90vh] flex flex-row items-center justify-center">
             <div className="flex flex-col items-center justify-center space-y-4">
-                <h2>Inscribir un estudiante</h2>
+                <h2>{isModForm? "Modificar un estudiante" : "Inscribir un estudiante"}</h2>
                 <form onSubmit={onFormSubmit} className="bg-gray-200 p-5 space-y-2 border-2 border-gray-400 rounded-xl">
                   <FormInput 
                     value={Form.nombre} 
@@ -79,7 +79,7 @@ const EstudianteForm = ({onFormSubmit,onInputChange,validate,Form,Errors,listado
                     pnfList={(listado !== null && listado?.length > 0) ? listado : []}
                   />
                   <div className="w-full flex flex-row justify-center !mt-7">
-                    <button type="submit" className="btn-info-primary">Inscribir estudiante</button>
+                    <button type="submit" className="btn-info-primary">{isModForm? "Modificar estudiante" : "Inscribir estudiante"}</button>
                   </div>
                 </form>
             </div>

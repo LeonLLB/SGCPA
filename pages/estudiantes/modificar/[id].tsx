@@ -119,7 +119,8 @@ const EstudianteModificar = (props) => {
         validate={validate}
         Form={Form}
         Errors={Errors}
-        listado={props.listado}    
+        listado={props.listado}
+        isModForm={true} 
       />
     )
 }

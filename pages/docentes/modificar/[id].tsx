@@ -99,7 +99,8 @@ const DocenteModificar = (props) => {
         onInputChange={onInputChange}
         validate={validate}
         Form={Form}
-        Errors={Errors}   
+        Errors={Errors}
+        isModForm={true} 
       />
     )
 }

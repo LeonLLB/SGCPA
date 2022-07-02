@@ -40,14 +40,14 @@ const Sidebar = ({closing, onClose}) => {
 								<SidebarItem isActive={router.asPath === '/estudiantes/registrar'} icon="add" title="Añadir" onClick={()=>{onSidebarItemClick("/estudiantes/registrar")}}/>
 							</SidebarGroupItemHeader>
 						}
-						<SidebarItem isActive={router.asPath === '/docentes'} icon="person" title="Docentes" onClick={docentesItemState.Interaction}/>
+						<SidebarItem isActive={router.asPath.includes('/docentes')} icon="person" title="Docentes" onClick={docentesItemState.Interaction}/>
 						{	docentesItemState.Visible &&
 							<SidebarGroupItemHeader closing={docentesItemState.Closing}>
 								<SidebarItem isActive={router.asPath === '/docentes'} icon="person" title="Listado" onClick={()=>{onSidebarItemClick("/docentes")}}/>
 								<SidebarItem isActive={router.asPath === '/docentes/registrar'} icon="person_add" title="Añadir" onClick={()=>{onSidebarItemClick("/docentes/registrar")}}/>
 							</SidebarGroupItemHeader>
 						}
-						<SidebarItem isActive={router.asPath === '/cargas'} icon="calendar_month" title="Cargas Académicas" onClick={cargasItemState.Interaction}/>
+						<SidebarItem isActive={router.asPath.includes('/cargas')} icon="calendar_month" title="Cargas Académicas" onClick={cargasItemState.Interaction}/>
 						{	cargasItemState.Visible &&
 							<SidebarGroupItemHeader closing={cargasItemState.Closing}>
 								<SidebarItem isActive={router.asPath === '/cargas'} icon="calendar_month" title="Listado" onClick={()=>{onSidebarItemClick("/cargas")}}/>
@@ -55,7 +55,7 @@ const Sidebar = ({closing, onClose}) => {
 								<SidebarItem icon="picture_as_pdf" title="Generar PDF" tiny={true} />
 							</SidebarGroupItemHeader>
 						}
-						<SidebarItem isActive={router.asPath === '/comites'} icon="badge" title="Comites Evaluadores" onClick={comitesItemState.Interaction}/>
+						<SidebarItem isActive={router.asPath.includes('/comites')} icon="badge" title="Comites Evaluadores" onClick={comitesItemState.Interaction}/>
 						{	comitesItemState.Visible &&
 							<SidebarGroupItemHeader closing={comitesItemState.Closing}>
 								<SidebarItem isActive={router.asPath === '/comites'} icon="badge" title="Listado" onClick={()=>{onSidebarItemClick("/comites")}}/>
@@ -63,7 +63,7 @@ const Sidebar = ({closing, onClose}) => {
 								<SidebarItem icon="picture_as_pdf" title="Generar PDF" tiny={true} />
 							</SidebarGroupItemHeader>
 						}
-						<SidebarItem isActive={router.asPath === '/presentaciones'} icon="co_present" title="Presentaciones" onClick={presentacionesItemState.Interaction}/>
+						<SidebarItem isActive={router.asPath.includes('/presentaciones')} icon="co_present" title="Presentaciones" onClick={presentacionesItemState.Interaction}/>
 						{	presentacionesItemState.Visible &&
 							<SidebarGroupItemHeader closing={presentacionesItemState.Closing}>
 								<SidebarItem isActive={router.asPath === '/presentaciones'} icon="co_present" title="Listado" onClick={()=>{onSidebarItemClick("/presentaciones")}}/>
@@ -71,7 +71,7 @@ const Sidebar = ({closing, onClose}) => {
 								<SidebarItem icon="picture_as_pdf" title="Generar PDF" tiny={true} />
 							</SidebarGroupItemHeader>
 						}
-						<SidebarItem isActive={router.asPath === '/proyectos'} icon="book" title="Proyectos" onClick={proyectosItemState.Interaction}/>
+						<SidebarItem isActive={router.asPath.includes('/proyectos')} icon="book" title="Proyectos" onClick={proyectosItemState.Interaction}/>
 						{	proyectosItemState.Visible &&
 							<SidebarGroupItemHeader closing={proyectosItemState.Closing}>
 								<SidebarItem isActive={router.asPath === '/proyectos'} icon="book" title="Listado" onClick={()=>{onSidebarItemClick("/proyectos")}}/>
@@ -80,7 +80,7 @@ const Sidebar = ({closing, onClose}) => {
 								<SidebarItem icon="picture_as_pdf" title="Generar PDF" tiny={true} />
 							</SidebarGroupItemHeader>
 						}
-						<SidebarItem isActive={router.asPath === '/formatos'} icon="description" title="Formatos" onClick={()=>{onSidebarItemClick("/formatos")}}/>
+						<SidebarItem isActive={router.asPath.includes('/formatos')} icon="description" title="Formatos" onClick={()=>{onSidebarItemClick("/formatos")}}/>
 						<SidebarItem isActive={router.asPath.includes('/administrativo')} icon="settings" title="Administrativo" onClick={adminItemState.Interaction}/>
             {	adminItemState.Visible &&
 							<SidebarGroupItemHeader closing={adminItemState.Closing}>
