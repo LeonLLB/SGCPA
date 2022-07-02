@@ -1,12 +1,10 @@
 import { useRouter } from "next/router";
 import { toast } from "react-toastify";
-import prisma from "../../prismaClient";
 import useForm from "../../hooks/useForm";
 import useValidate from "../../hooks/useValidate";
-import EstudianteForm from "../../components/form/EstudianteForm";
+import DocenteForm from "../../components/form/DocenteForm";
 
-const AddEstudiante = (props) => {
-
+const AddDocente = () => {
   
   const router = useRouter()
   
@@ -43,14 +41,6 @@ const AddEstudiante = (props) => {
     direccion: {
       required:true
     },
-    pnf: {
-      required:true,
-      minLength:1
-    },
-    trayecto: {
-      required:true,
-      minLength:1
-    }
   })
 
   const [Form, onInputChange] = useForm({
@@ -60,15 +50,13 @@ const AddEstudiante = (props) => {
     correo: "",
     telefono: "",
     direccion: "",
-    pnf: "",
-    trayecto: ""
   },(event)=>{validate(event)})
   
   const onFormSubmit = (event) => {
     event.preventDefault()
     if(isItValid()){
-      const toastReference = toast.loading('Inscribiendo Estudiante...')
-			fetch('/api/estudiantes',{
+      const toastReference = toast.loading('Inscribiendo Docente...')
+			fetch('/api/docentes',{
 				method:'POST',
 				headers:{
 					'Content-Type':'application/json'
@@ -79,7 +67,7 @@ const AddEstudiante = (props) => {
 			.then(res=>{
 				if(res.isOk){
 					toast.update(toastReference,{closeButton:true,closeOnClick:true,render:res.result,type:'success',isLoading:false,autoClose:4000})
-          router.push('/estudiantes')
+          router.push('/docentes')
 				}
 				else{
 					toast.update(toastReference,{closeButton:true,closeOnClick:true,render:res.motive,type:'error',isLoading:false,autoClose:4000})
@@ -90,36 +78,15 @@ const AddEstudiante = (props) => {
     }
   }
 
-  if(props.listado === null){
-    toast.loading('Obteniendo listado de Programas...')
-  }
-
-  else if(props.listado !== null && props.listado?.length === 0){
-    toast.info('No existen carreras, no es posible inscribir a un estudiante.')
-    router.push('/')
-  }
-
   return (
-    <EstudianteForm
+    <DocenteForm
       onFormSubmit={onFormSubmit}
       onInputChange={onInputChange}
       validate={validate}
       Form={Form}
-      Errors={Errors}
-      listado={props.listado}    
+      Errors={Errors}  
     />
   )
 }
 
-export const getServerSideProps = async (context) =>{
-
-	const listadoDeCarreras = await prisma.pNF.findMany()
-
-	return {
-		props: {
-			listado:listadoDeCarreras
-		}
-	}
-}
-
-export default AddEstudiante
+export default AddDocente

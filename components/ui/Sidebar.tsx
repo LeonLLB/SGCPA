@@ -44,7 +44,7 @@ const Sidebar = ({closing, onClose}) => {
 						{	docentesItemState.Visible &&
 							<SidebarGroupItemHeader closing={docentesItemState.Closing}>
 								<SidebarItem isActive={router.asPath === '/docentes'} icon="person" title="Listado" onClick={()=>{onSidebarItemClick("/docentes")}}/>
-								<SidebarItem isActive={router.asPath === '/docentes/añadir'} icon="person_add" title="Añadir" onClick={()=>{onSidebarItemClick("/")}}/>
+								<SidebarItem isActive={router.asPath === '/docentes/registrar'} icon="person_add" title="Añadir" onClick={()=>{onSidebarItemClick("/docentes/registrar")}}/>
 							</SidebarGroupItemHeader>
 						}
 						<SidebarItem isActive={router.asPath === '/cargas'} icon="calendar_month" title="Cargas Académicas" onClick={cargasItemState.Interaction}/>
