@@ -1,10 +1,12 @@
 import { useRouter } from 'next/router'
-import {useEffect, useState} from 'react'
+import {useEffect, useState, MouseEvent} from 'react'
 import { toast } from 'react-toastify'
 import PNFSelect from '../../components/form/PNFSelect'
 import TrayectoSelect from '../../components/form/TrayectoSelect'
 import FormInput from '../../components/ui/FormInput'
+import Modal from '../../components/ui/Modal'
 import trayectoSwitch from '../../helpers/trayectoSwitch'
+import useElementAsyncTransition from '../../hooks/useElementAsyncTransition'
 import useForm from '../../hooks/useForm'
 import Estudiante from '../../interfaces/Estudiante'
 import prisma from "../../prismaClient"
@@ -14,6 +16,8 @@ const EstudiantesMain = (props) => {
 
   const [listado, setListado] = useState<Estudiante[]>([])
   const router = useRouter()
+  const [EstudianteId, setEstudianteId] = useState(null)
+  const confirmModalState = useElementAsyncTransition(200)
 
   const [Form, onInputChange, reset] = useForm({
     nombre: "",
@@ -32,6 +36,36 @@ const EstudiantesMain = (props) => {
       setListado(primerListado)
     }
   }, [])
+
+  const onEstudiantePreDelete = (event:MouseEvent,id:number) => {
+		event.preventDefault()
+		setEstudianteId(id)
+		confirmModalState.Interaction()
+	}
+
+	const onEstudianteDelete = () => {
+		const toastReference = toast.loading('Eliminando Estudiante...')
+    fetch('/api/estudiantes',{
+			method:'DELETE',
+			headers:{
+				'Content-Type':'application/json'
+			},
+			body:JSON.stringify({id:EstudianteId})
+		})
+		.then(res=>res.json())
+		.then(res=>{
+			if(res.isOk){
+				toast.update(toastReference,{closeButton:true,closeOnClick:true,render:res.result,type:'success',isLoading:false,autoClose:4000})
+        filterEstudiantes(true)
+        reset()
+      }
+			else{
+				toast.update(toastReference,{closeButton:true,closeOnClick:true,render:res.result,type:'error',isLoading:false,autoClose:4000})
+			}
+			setEstudianteId(0)			
+			confirmModalState.Interaction()
+		})
+	}
 
   const filterEstudiantes = (clean: boolean = false) => {
     const URL = (clean === false) ?
@@ -166,7 +200,7 @@ const EstudiantesMain = (props) => {
                       <button onClick={(e)=>{router.push(`/estudiantes/modificar/${estudiante.id}`)}}>
                         <span className="material-icons text-3xl">edit</span>
                       </button>
-                      <button onClick={(e)=>{}}>
+                      <button onClick={(e)=>{onEstudiantePreDelete(e,estudiante.id)}}>
                         <span className="material-icons text-3xl">delete</span>
                       </button>
                     </td>
@@ -177,6 +211,21 @@ const EstudiantesMain = (props) => {
           </div>
 				</div>
 			</div>
+      { confirmModalState.Visible &&
+        <Modal title="Confirmar eliminación" onClose={confirmModalState.Interaction} closing={confirmModalState.Closing}>
+          <div className="flex flex-col space-y-2 items-center">
+            
+            <span className="material-icons text-6xl text-red-600">warning</span>
+
+            <span className="text-red-600 w-96">Esta seguro de querer eliminar este estudiante? Se eliminara tambien de los proyectos en los que haya participado</span>
+              
+            <div className="flex flex-row space-x-5 w-full justify-end">
+              <button onClick={onEstudianteDelete} className="btn-danger-primary">Eliminar</button>
+              <button onClick={confirmModalState.Interaction} className="btn-danger-secondary">Cancelar</button>	
+            </div>
+          </div>
+        </Modal>
+      }
     </>
   )
 }

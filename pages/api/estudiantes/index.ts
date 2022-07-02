@@ -98,6 +98,22 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
             return res.status(400).json(response)
         })
     }
+    else if(req.method === 'DELETE'){
+        return prisma.estudiante.delete({
+            where: {id:parseInt(req.body.id)}
+        })
+        .then((result)=>{
+            return res.status(200).json({result:'Estudiante Eliminado correctamente!',isOk:true,resultado:result})
+        })
+        .catch(e=>{
+            if(e.code === "P2025"){
+                return res.status(404).json({result:'El elemento no existe',isOk:false,code:"P2025"})                
+            }else{
+                console.log(e)
+                return res.status(400).json({result:'Falla desconocida',isOk:false,code:e.code})
+            }
+        })
+    }
 }
 
 export default handler
