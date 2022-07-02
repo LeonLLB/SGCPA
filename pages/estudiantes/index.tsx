@@ -53,7 +53,7 @@ const EstudiantesMain = (props) => {
 
   return (
     <>
-      <div className="h-[95.25vh] flex flex-row items-center justify-center">
+      <div className="mt-5 flex flex-row items-center justify-center">
 				<div className="w-full flex flex-col items-center space-y-4 justify-center">
 
 					<h2>Listado de Estudiantes</h2>
@@ -163,7 +163,7 @@ const EstudiantesMain = (props) => {
                     <td className="td-pnf">{estudiante.pnf}</td>
                     <td className="td-pnf font-serif">{trayectoSwitch(estudiante.trayecto)}</td>
                     <td className="td-pnf font-semibold">
-                      <button onClick={(e)=>{}}>
+                      <button onClick={(e)=>{router.push(`/estudiantes/modificar/${estudiante.id}`)}}>
                         <span className="material-icons text-3xl">edit</span>
                       </button>
                       <button onClick={(e)=>{}}>

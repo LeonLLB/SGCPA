@@ -38,9 +38,17 @@ const useValidate = (FormData: any) => {
             this.value = {}
         }
     }
+
+    const forceValidate = (formValues,isModForm:boolean=true) =>{
+        Object.entries(formValues).forEach(([name,value])=>{
+            validate({target:{name,value}},false,( isModForm ? (Object.values(formValues).length) + 1 : (Object.values(formValues).length) ))
+        })
+    }
     
-    const validate = ({target:{name,value}}) => {
+    const validate = ({target:{name,value}},single:boolean=true,formLength:number=1) => {
+        let i = 0
         Object.entries<FormDataInterface>(FormData).forEach(([Name,Value]: [String, FormDataInterface]) => {
+            i += 1
             if(name === Name){
                 // Ejecutar validaciones
 
@@ -255,10 +263,15 @@ const useValidate = (FormData: any) => {
                     ...Errors,
                     ...ErrorSyncState.value
                 })
-                ErrorSyncState.reset()
+                if(
+                    single === false && i === formLength ||
+                    single
+                ){
+                    ErrorSyncState.reset()
+                }
                 return
             }
-            else if(FormData[name] === undefined){
+            else if(FormData[name] === undefined && name !== 'id'){
                 throw new Error('UNREGISTERED FIELD '+name)
             }
         })
@@ -292,7 +305,7 @@ const useValidate = (FormData: any) => {
         return isValid
     }
 
-    return {Errors,isItValid, validate}
+    return {Errors,isItValid, validate,forceValidate}
 }
 
 export default useValidate
