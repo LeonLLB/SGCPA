@@ -163,7 +163,7 @@ const DocentesMain = (props) => {
               </thead>
               <tbody>							
                 {	(listado !== null && listado.length > 0) && listado.map(docente=>
-                  <tr>
+                  <tr key={docente.id}>
                     <td className="td-pnf">{docente.nombre}</td>
                     <td className="td-pnf">{docente.apellido}</td>
                     <td className="td-pnf">{docente.cedula}</td>
