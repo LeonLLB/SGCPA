@@ -170,7 +170,7 @@ const EstudiantesMain = (props) => {
               <button className='btn-info-primary' onClick={()=>{filterEstudiantes()}}> Filtrar estudiantes </button>
             </div>
           </div>
-          <div className='overflow-x-auto xl:w-auto w-11/12'>
+          <div className='overflow-x-auto xl:w-auto w-11/12 pb-2'>
             <table className="h-full text-center border-collapse border-2 border-gray-500">
               <thead>
                 <tr>
