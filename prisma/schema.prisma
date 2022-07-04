@@ -18,6 +18,7 @@ model Docente {
   correo String
   telefono String
   direccion String
+  activo Boolean @default(true)
   cargaAcademica CargaAcademica[]
   asesorDe Jurado[] @relation("docente")
   metodologoDe Jurado[] @relation("metodologo")
@@ -34,6 +35,7 @@ model Estudiante {
   telefono String
   direccion String
   pnf String
+  activo Boolean @default(true)
   proyectos Proyecto[]
   trayecto Int
 }
@@ -53,7 +55,6 @@ model CargaAcademica {
   turno String
   horario1 String
   horario2 String?
-  proyectos Proyecto[]
   aula Int
   docente Docente @relation(fields:[docenteID],references:[id])
 }
@@ -68,6 +69,7 @@ model Jurado {
   academicoID Int?
   adicionalID Int?
   defensoresDe Defensa[]
+  juradosDe Proyecto[]
   asesor Docente @relation(name:"docente",fields:[asesorID],references:[id])
   metodologo Docente? @relation(name:"metodologo",fields:[metodologoID],references:[id])
   academico Docente? @relation(name:"academico",fields:[academicoID],references:[id])
@@ -76,8 +78,6 @@ model Jurado {
 
 model Defensa{
   id Int @id @default(autoincrement())
-  pnf String
-  trayecto Int
   periodo String
   preDefensa DateTime
   defensa DateTime
@@ -88,10 +88,8 @@ model Defensa{
 
 model Proyecto {
   id Int @id @default(autoincrement())
-  pnf String
-  trayecto Int
   periodo String
-  cargaID Int
+  juradoID Int
   titulo String @unique
   comunidad String
   linea String
@@ -99,7 +97,7 @@ model Proyecto {
   cdEntregado Boolean
   ponderacion Ponderacion?
   integrantes Estudiante[]
-  cargaAcademica CargaAcademica @relation(fields:[cargaID],references:[id])
+  jurado Jurado @relation(fields: [juradoID],references: [id])
 }
 
 model Ponderacion {

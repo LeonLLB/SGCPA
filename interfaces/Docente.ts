@@ -5,6 +5,7 @@ interface Docente{
     cedula: number,
     correo: string,
     telefono: string,
+    activo:boolean,
     direccion: string
 }
 

@@ -7,6 +7,7 @@ interface Estudiante{
     telefono: string,
     direccion: string,
     pnf: string,
+    activo:boolean,
     trayecto:number
 }
 

@@ -51,7 +51,7 @@ const Sidebar = ({closing, onClose}) => {
 						{	cargasItemState.Visible &&
 							<SidebarGroupItemHeader closing={cargasItemState.Closing}>
 								<SidebarItem isActive={router.asPath === '/cargas'} icon="calendar_month" title="Listado" onClick={()=>{onSidebarItemClick("/cargas")}}/>
-								<SidebarItem isActive={router.asPath === '/cargas/añadir'} icon="add" title="Añadir" onClick={()=>{onSidebarItemClick("/")}}/>
+								<SidebarItem isActive={router.asPath === '/cargas/registrar'} icon="add" title="Añadir" onClick={()=>{onSidebarItemClick("/cargas/registrar")}}/>
 								<SidebarItem icon="picture_as_pdf" title="Generar PDF" tiny={true} />
 							</SidebarGroupItemHeader>
 						}
