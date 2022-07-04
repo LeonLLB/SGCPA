@@ -31,14 +31,14 @@ const EstudianteModificar = (props) => {
         }
       },
       correo: {
-        required:true,
+        required:false,
         regex:{
           exp:RegExp("@(gmail|hotmail|yahoo|outlook|icloud).com$"),
           example:"xxx@xxx.com"
         }
       },
       telefono: {
-        required:true,
+        required:false,
         regex:{
           exp:RegExp("04(14|24|12|16|26)[0-9]{7}$"),
           example:"04xxyyyzzzz"

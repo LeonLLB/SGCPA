@@ -15,8 +15,8 @@ model Docente {
   nombre String
   apellido String
   cedula Int @unique
-  correo String
-  telefono String
+  correo String?
+  telefono String?
   direccion String
   activo Boolean @default(true)
   cargaAcademica CargaAcademica[]
@@ -31,8 +31,8 @@ model Estudiante {
   nombre String
   apellido String
   cedula Int @unique
-  correo String
-  telefono String
+  correo String?
+  telefono String?
   direccion String
   pnf String
   activo Boolean @default(true)

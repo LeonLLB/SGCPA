@@ -206,7 +206,7 @@ const useValidate = (FormData: any) => {
                 }
 
                 // EN CASO DE NO CUMPLIR SU EXPRESION REGULAR
-                if(Value.regex && Value.regex.exp.test(value) === false){
+                if((value !== '' || Value.required !== false) && Value.regex && Value.regex.exp.test(value) === false){
                     ErrorSyncState.setValue({
                         ...ErrorSyncState.value,
                         [name]:{
