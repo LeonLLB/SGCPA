@@ -35,9 +35,58 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
                 return res.status(400).json(response)
             })
     }
-    else if (req.method === 'GET') {
-        
-            return res.status(400).json({isOk:false, result: 'non implemented'})
+    else if (req.method === 'GET') {        
+        let consulta = {}
+        if(req.query.periodo !== '' && req.query.periodo !== undefined){
+            consulta['periodo'] = {
+                contains:req.query.periodo as string
+            }
+        }
+        if(req.query.pnf !== '' && req.query.pnf !== undefined){
+            consulta['pnf'] = {
+                contains:req.query.pnf as string
+            }
+        }
+        if(req.query.dia !== '' && req.query.dia !== undefined){
+            consulta['horario1'] = {
+                contains:req.query.dia as string
+            }
+            consulta['horario2'] = {
+                contains:req.query.dia as string
+            }
+        }
+        if(req.query.trayecto !== '' && req.query.trayecto !== undefined){
+            consulta['trayecto'] = parseInt(req.query.trayecto as string)
+        }
+        if(req.query.docente !== '' && req.query.docente !== undefined){
+            consulta['docenteID'] = parseInt(req.query.docente as string)
+        }
+        return prisma.cargaAcademica.findMany({
+            where: consulta,
+            include:{
+                docente:true
+            }
+        })
+        .then((data) => {
+            return res.status(200).json({isOk:true,data})
+        })
+        .catch((e) => {
+            let response = {
+                result: 'No se pudo filtrar a las cargas',
+                motive: '',
+                isOk: false,
+                errorCode: e.code
+            }
+            if (e.code === null || e.code === undefined) {
+                console.log(e)
+                response.motive = "Error del servidor."
+                return res.status(500).json(response)
+            }
+            else {
+                response.motive = "No se pudo filtrar, error desconocido"
+            }
+            return res.status(400).json(response)
+        })
         
     }
     else if(req.method === 'DELETE'){
