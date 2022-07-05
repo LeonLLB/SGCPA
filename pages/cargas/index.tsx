@@ -209,10 +209,22 @@ const CargasAcademicasMain = (props) => {
 export default CargasAcademicasMain
 
 export const getServerSideProps = async (context) =>{
-   
+
+  const ultimaCarga = await prisma.cargaAcademica.findFirst({
+    orderBy:{
+      periodo:'desc'
+    },
+    select:{
+      periodo:true
+    }
+  })
+
   const listadoCargas = await prisma.cargaAcademica.findMany({
     include:{
       docente:true
+    },
+    where:{
+      periodo:ultimaCarga.periodo
     }
   })
   const listadoDocentes = await prisma.docente.findMany()

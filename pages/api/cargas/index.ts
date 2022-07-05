@@ -35,11 +35,25 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
                 return res.status(400).json(response)
             })
     }
-    else if (req.method === 'GET') {        
+    else if (req.method === 'GET') {       
         let consulta = {}
+
+        const ultimaCarga = await prisma.cargaAcademica.findFirst({
+            orderBy:{
+              periodo:'desc'
+            },
+            select:{
+              periodo:true
+            }
+          })
+
         if(req.query.periodo !== '' && req.query.periodo !== undefined){
             consulta['periodo'] = {
                 contains:req.query.periodo as string
+            }
+        }else{
+            consulta['periodo'] = {
+                contains:ultimaCarga.periodo
             }
         }
         if(req.query.pnf !== '' && req.query.pnf !== undefined){
