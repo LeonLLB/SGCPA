@@ -1,10 +1,10 @@
 import { NextApiRequest, NextApiResponse } from "next";
-import { existeDocente } from "../../../middlewares/Docente";
+import { existeCarga } from "../../../middlewares/Carga";
 import prisma from "../../../prismaClient";
 
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
 	if (req.method === 'PUT') {
-		if((await existeDocente(req)) === false){
+		if((await existeCarga(req)) === false){
 			let response = {
 				result: 'No existe la carga',
 				isOk: false,

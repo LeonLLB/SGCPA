@@ -44,16 +44,13 @@ const RegistrarCarga = (props) => {
             minLength: 1
         },
         dia2: {
-            required: false,
-            minLength: 1
+            required: false
         },
         horario2entrada: {
-            required: false,
-            minLength: 1
+            required: false
         },
         horario2salida: {
-            required: false,
-            minLength: 1
+            required: false
         },
         aula: {
             required: true,
