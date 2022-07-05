@@ -193,7 +193,7 @@ const CargasAcademicasMain = (props) => {
             
             <span className="material-icons text-6xl text-red-600">warning</span>
 
-            <span className="text-red-600 w-96">Esta seguro de querer eliminar este docente? Se eliminara tambien de los proyectos, jurados y cargas en los que haya participado</span>
+            <span className="text-red-600 w-96">Esta seguro de querer eliminar esta? Una vez eliminada no podra ser recuperada!</span>
               
             <div className="flex flex-row space-x-5 w-full justify-end">
               <button onClick={onCargaDelete} className="btn-danger-primary">Eliminar</button>
