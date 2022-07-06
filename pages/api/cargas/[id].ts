@@ -11,6 +11,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
 			}
 			return res.status(404).json(response)
 		}
+		const cargaAModificar = await prisma.cargaAcademica.findFirst({where:{id:parseInt(req.query.id as string)}})
 		return prisma.cargaAcademica.update({
 			where: {
 				id: parseInt(req.query.id as string)
@@ -26,9 +27,24 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
                 aula: parseInt(req.body.aula as string)
 			}
 		})
-			.then((data) => {
-				console.log(data)
-				return res.status(200).json({ result: 'Carga modificada con exito', isOk: true, data })
+			.then((data) => {	
+				return prisma.jurado.updateMany({
+					data:{
+						asesorID:data.docenteID,
+						periodo:data.periodo,
+						pnf:data.pnf,
+						trayecto:data.trayecto
+					},
+					where:{
+						pnf: cargaAModificar.pnf,
+						trayecto: cargaAModificar.trayecto,
+						periodo: cargaAModificar.periodo,
+						asesorID: cargaAModificar.docenteID,
+					}
+				})
+				.then(()=>{
+					return res.status(200).json({ result: 'Carga modificada con exito', isOk: true, data })
+				})
 			})
 			.catch((e) => {
 				let response = {
