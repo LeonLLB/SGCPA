@@ -59,7 +59,6 @@ const Sidebar = ({closing, onClose}) => {
 						{	comitesItemState.Visible &&
 							<SidebarGroupItemHeader closing={comitesItemState.Closing}>
 								<SidebarItem isActive={router.asPath === '/comites'} icon="badge" title="Listado" onClick={()=>{onSidebarItemClick("/comites")}}/>
-								<SidebarItem isActive={router.asPath === '/comites/añadir'} icon="group_add" title="Añadir" onClick={()=>{onSidebarItemClick("/")}}/>
 								<SidebarItem icon="picture_as_pdf" title="Generar PDF" tiny={true} />
 							</SidebarGroupItemHeader>
 						}

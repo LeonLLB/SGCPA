@@ -11,18 +11,19 @@ interface DocentesSelectProps {
     error: FormError,
     isCol?: boolean,
     label?: string,
-    required:boolean
+    required:boolean,
+    name?:string
 }
 
-const DocentesSelect: FC<DocentesSelectProps> = ({label = "Docente:",isCol = false,error,docenteList,required,onInputChange,value,className,onBlur}) => {
+const DocentesSelect: FC<DocentesSelectProps> = ({name="docenteID",label = "Docente:",isCol = false,error,docenteList,required,onInputChange,value,className,onBlur}) => {
   
     return (
     <>
         <span className={`flex ${isCol?"flex-col":"flex-row"} items-center justify-end space-x-2`}>
-            <label htmlFor="docenteID">{label}</label>
+            <label htmlFor={name}>{label}</label>
             
             <div className="border border-gray-400 p-1 rounded-xl">
-                <select onBlur={onBlur} value={value} className={` h-full transition-colors duration-200 focus:border-2 focus:bg-gray-200 focus:border-blue-500 outline-none p-2 rounded-lg border-2 border-gray-400 bg-gray-300 focus:outline-none focus:shadow-outline ${className}`} onChange={onInputChange} name="docenteID" id="docenteID">
+                <select onBlur={onBlur} value={value} className={` h-full transition-colors duration-200 focus:border-2 focus:bg-gray-200 focus:border-blue-500 outline-none p-2 rounded-lg border-2 border-gray-400 bg-gray-300 focus:outline-none focus:shadow-outline ${className}`} onChange={onInputChange} name={name} id={name}>
                     <option value="" disabled={required}></option>
                     {   docenteList.map(docente=>
                         <option key={docente.id} value={docente.id}>{docente.nombre} {docente.apellido}</option>
