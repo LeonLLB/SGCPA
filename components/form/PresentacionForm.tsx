@@ -1,4 +1,5 @@
 import FormInput from "../ui/FormInput"
+import AulaSelect from "./AulaSelect"
 import DateSelect from "./DateSelect"
 import PNFSelect from "./PNFSelect"
 import TrayectoSelect from "./TrayectoSelect"
@@ -76,6 +77,15 @@ const PresentacionForm = ({ PNFListado, onFormSubmit, onInputChange, validate, F
                         onInputChange={onInputChange}
                         onBlur={validate}
                         required={false}
+                    />
+                    <AulaSelect
+                        value={Form.aula}
+                        onInputChange={onInputChange}
+                        onBlur={validate}
+                        required={false}
+                        withNonNumericAulas={true}
+                        label="Aula de presentación"
+                        error={(Errors.aula !== undefined || Errors.aula !== null) ? Errors.aula : null}
                     />
                     <div className="w-full flex flex-row justify-center !mt-7">
                         <button type="submit" className="btn-info-primary">{isModForm ? "Modificar presentación" : "Inscribir presentación"}</button>

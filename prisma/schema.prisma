@@ -68,7 +68,6 @@ model Jurado {
   metodologoID Int?
   academicoID Int?
   adicionalID Int?
-  defensoresDe Defensa[]
   juradosDe Proyecto[]
   asesor Docente @relation(name:"docente",fields:[asesorID],references:[id])
   metodologo Docente? @relation(name:"metodologo",fields:[metodologoID],references:[id])
@@ -78,12 +77,12 @@ model Jurado {
 
 model Defensa{
   id Int @id @default(autoincrement())
+  pnf String
+  trayecto Int
   periodo String
-  preDefensa DateTime
-  defensa DateTime
-  aula String
-  juradoID Int
-  jurado Jurado @relation(fields:[juradoID],references:[id])
+  preDefensa DateTime?
+  defensa DateTime?
+  aula String?
 }
 
 model Proyecto {

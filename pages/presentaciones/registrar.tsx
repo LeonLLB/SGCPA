@@ -45,6 +45,9 @@ const RegistrarPresentacion = (props) => {
         yearDefensa: {
             required: false
         },
+        aula:{
+            required:false
+        }
     })
 
     const [Form, onInputChange] = useForm({
@@ -57,6 +60,7 @@ const RegistrarPresentacion = (props) => {
         diaDefensa: "",
         mesDefensa: "",
         yearDefensa: "",
+        aula:''
     }, (event) => { validate(event) })
 
     const onFormSubmit = (event) => {
