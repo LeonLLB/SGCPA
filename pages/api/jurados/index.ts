@@ -80,6 +80,10 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
         }
         return prisma.jurado.findMany({
             where: consulta,
+            orderBy:[
+                {pnf:'desc'},
+                {trayecto:'asc'}
+              ],
             include:{
                 asesor:true,
                 metodologo:true,

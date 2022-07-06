@@ -88,6 +88,10 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
         }
         return prisma.cargaAcademica.findMany({
             where: consulta,
+            orderBy:[
+                {pnf:'desc'},
+                {trayecto:'asc'}
+              ],
             include:{
                 docente:true
             }

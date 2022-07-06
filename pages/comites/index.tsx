@@ -263,6 +263,10 @@ export const getServerSideProps = async (context) => {
       academico: true,
       adicional: true
     },
+    orderBy:[
+      {pnf:'desc'},
+      {trayecto:'asc'}
+    ],
     where: {
       periodo: ultimaJurado.periodo
     }

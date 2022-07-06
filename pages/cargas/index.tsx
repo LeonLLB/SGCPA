@@ -223,6 +223,10 @@ export const getServerSideProps = async (context) =>{
     include:{
       docente:true
     },
+    orderBy:[
+      {pnf:'desc'},
+      {trayecto:'asc'}
+    ],
     where:{
       periodo:ultimaCarga.periodo
     }
