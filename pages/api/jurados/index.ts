@@ -62,9 +62,22 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
         if(req.query.trayecto !== '' && req.query.trayecto !== undefined){
             consulta['trayecto'] = parseInt(req.query.trayecto as string)
         }
-        /* if(req.query.docente !== '' && req.query.docente !== undefined){
-            consulta['asesor'] = parseInt(req.query.docente as string)
-        } */
+        if(req.query.docente !== '' && req.query.docente !== undefined){
+            consulta['OR'] = [
+                {
+                    asesorID:parseInt(req.query.docente as string)
+                },
+                {
+                    metodologoID:parseInt(req.query.docente as string)
+                },
+                {
+                    academicoID:parseInt(req.query.docente as string)
+                },
+                {
+                    adicionalID:parseInt(req.query.docente as string)
+                },
+            ] 
+        }
         return prisma.jurado.findMany({
             where: consulta,
             include:{
