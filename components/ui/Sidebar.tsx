@@ -66,7 +66,7 @@ const Sidebar = ({closing, onClose}) => {
 						{	presentacionesItemState.Visible &&
 							<SidebarGroupItemHeader closing={presentacionesItemState.Closing}>
 								<SidebarItem isActive={router.asPath === '/presentaciones'} icon="co_present" title="Listado" onClick={()=>{onSidebarItemClick("/presentaciones")}}/>
-								<SidebarItem isActive={router.asPath === '/presentaciones/añadir'} icon="add" title="Añadir" onClick={()=>{onSidebarItemClick("/")}}/>
+								<SidebarItem isActive={router.asPath === '/presentaciones/registrar'} icon="add" title="Añadir" onClick={()=>{onSidebarItemClick("/presentaciones/registrar")}}/>
 								<SidebarItem icon="picture_as_pdf" title="Generar PDF" tiny={true} />
 							</SidebarGroupItemHeader>
 						}
