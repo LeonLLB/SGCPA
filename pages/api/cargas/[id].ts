@@ -27,6 +27,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
 			}
 		})
 			.then((data) => {
+				console.log(data)
 				return res.status(200).json({ result: 'Carga modificada con exito', isOk: true, data })
 			})
 			.catch((e) => {

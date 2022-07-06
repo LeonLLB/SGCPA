@@ -3,7 +3,7 @@ import prisma from "../../../prismaClient";
 
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     if (req.method === 'POST') {
-        return prisma.cargaAcademica.create({
+        const cargaPromise = prisma.cargaAcademica.create({
             data: {
                 pnf: req.body.pnf,
                 trayecto: parseInt(req.body.trayecto as string),
@@ -15,25 +15,36 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
                 aula: parseInt(req.body.aula as string)
             }
         })
-            .then((data) => {
+        .then((data) => {
+            return prisma.jurado.create({
+                data:{
+                    pnf: req.body.pnf,
+                    trayecto: parseInt(req.body.trayecto as string),
+                    periodo: req.body.periodo,
+                    asesorID: parseInt(req.body.docenteID as string)
+                }
+            })
+            .then(()=>{
                 return res.status(200).json({ result: 'Carga inscrita con exito', isOk: true, data })
             })
-            .catch((e) => {
-                let response = {
-                    result: 'No se pudo inscribir la carga',
-                    motive: '',
-                    isOk: false,
-                    errorCode: e.code
-                }
-                if (e.code === null || e.code === undefined) {
-                    response.motive = "Error del servidor."
-                    return res.status(500).json(response)
-                }
-                else {
-                    response.motive = "No se pudo inscribir, error desconocido"
-                }
-                return res.status(400).json(response)
-            })
+        })
+        .catch((e) => {
+            let response = {
+                result: 'No se pudo inscribir la carga',
+                motive: '',
+                isOk: false,
+                errorCode: e.code
+            }
+            if (e.code === null || e.code === undefined) {
+                response.motive = "Error del servidor."
+                return res.status(500).json(response)
+            }
+            else {
+                response.motive = "No se pudo inscribir, error desconocido"
+            }
+            return res.status(400).json(response)
+        })
+        return await cargaPromise
     }
     else if (req.method === 'GET') {       
         let consulta = {}
@@ -108,7 +119,17 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
             where: {id:parseInt(req.body.id)}
         })
         .then((result)=>{
-            return res.status(200).json({result:'Carga eliminada correctamente!',isOk:true,resultado:result})
+            return prisma.jurado.deleteMany({
+                where:{
+                    asesorID:result.docenteID,
+                    periodo:result.periodo,
+                    pnf:result.pnf,
+                    trayecto:result.trayecto
+                }
+            })
+            .then(()=>{
+                return res.status(200).json({result:'Carga eliminada correctamente!',isOk:true,resultado:result})
+            })
         })
         .catch(e=>{
             if(e.code === "P2025"){
