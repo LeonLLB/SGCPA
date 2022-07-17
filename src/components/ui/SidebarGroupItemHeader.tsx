@@ -1,7 +1,8 @@
 import {FC} from 'react'
 
 interface SidebarGroupItemHeaderProps {
-    closing: boolean
+    closing: boolean,
+    children:any
 }
 
 const SidebarGroupItemHeader :FC<SidebarGroupItemHeaderProps> = ({children, closing}) => {

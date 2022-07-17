@@ -4,7 +4,7 @@ import FormError from '../../interfaces/formError'
 interface FormInputProps {
     value: string,
     onInputChange: (event:ChangeEvent)=>void,
-    onBlur?: (event)=>void,
+    onBlur?: (event: any)=>void,
     classNameContainer?:string,
     classNameLabel?:string,
     classNameInput?:string,
@@ -27,22 +27,22 @@ const FormInput: FC<FormInputProps> = ({isCol = false,value,onInputChange,onBlur
       { errors  && 
         <div className='flex flex-col items-end space-y-2'>
           { (!errors.required) &&
-            <span className='text-red-600 text-sm'>* {label} no puede estar vacío</span>
+            <span className='text-red-600 text-sm'><>* {label} no puede estar vacío</></span>
           }
           { (value !== '' && !errors.minLength?.state) &&
-            <span className='text-red-600 text-sm'>* {label} debe tener un mínimo de {errors.minLength?.value} caracteres</span>
+            <span className='text-red-600 text-sm'><>* {label} debe tener un mínimo de {errors.minLength?.value} caracteres</></span>
           }
           { (value !== '' && !errors.maxLength?.state) &&
-            <span className='text-red-600 text-sm'>* {label} debe tener un maximo de {errors.maxLength?.value} caracteres </span>
+            <span className='text-red-600 text-sm'><>* {label} debe tener un maximo de {errors.maxLength?.value} caracteres </></span>
           }
           { (value !== '' && !errors.min?.state) &&
-            <span className='text-red-600 text-sm'>* {label} debe ser mayor a {errors.min?.value} </span>
+            <span className='text-red-600 text-sm'><>* {label} debe ser mayor a {errors.min?.value} </></span>
           }
           { (value !== '' && !errors.max?.state) &&
-            <span className='text-red-600 text-sm'>* {label} debe ser menor a {errors.max?.value} </span>
+            <span className='text-red-600 text-sm'><>* {label} debe ser menor a {errors.max?.value} </></span>
           }
           { (value !== '' && !errors.minMaxWords?.state) &&
-            <span className='text-red-600 text-sm'>* {label} debe tener entre {errors.minMaxWords?.value[0]} y {errors.minMaxWords?.value[1]} palabras</span>
+            <span className='text-red-600 text-sm'><>* {label} debe tener entre {errors.minMaxWords?.value[0]} y {errors.minMaxWords?.value[1]} palabras</></span>
           }
           { (value !== '' && !errors.regex?.state) &&
             <span className='text-red-600 text-sm'>* {label} debe coincidir con el patron {errors.regex?.example}</span>

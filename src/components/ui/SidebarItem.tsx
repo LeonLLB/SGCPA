@@ -8,7 +8,7 @@ interface sidebarItemProps {
     isActive?: boolean
 }
 
-const SidebarItem: FC<sidebarItemProps> = ({icon, title, onClick,tiny,isActive=false}) => {
+const SidebarItem: FC<sidebarItemProps> = ({icon, title, onClick = ()=>{},tiny,isActive=false}) => {
   
   const onItemClick = (event:MouseEvent) => {
     event.preventDefault()
