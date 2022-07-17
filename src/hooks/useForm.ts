@@ -1,11 +1,6 @@
-import { ChangeEvent, useState } from 'react'
+import { useState } from 'react'
 
-interface TargetType {
-    name: string,
-    value: any
-}
-
-const useForm = (FormDefault = {},onChangeCallback:(event)=>void = ()=>{}): any[] => {
+const useForm = (FormDefault = {},onChangeCallback:(event:any)=>void = ()=>{}): any[] => {
 
     const [Form, setForm] = useState(FormDefault)
 
@@ -18,7 +13,7 @@ const useForm = (FormDefault = {},onChangeCallback:(event)=>void = ()=>{}): any[
     }
 
 
-    const onInputChange = (event): void => {
+    const onInputChange = (event:any): void => {
         const {target} = event
         setForm({
             ...Form,

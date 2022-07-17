@@ -31,7 +31,7 @@ const useValidate = (FormData: any) => {
     const [Errors, setErrors] = useState<any>({})
     const ErrorSyncState = {
         value:{},
-        setValue(state){
+        setValue(state: any){
             this.value = state
         },
         reset(){
@@ -39,13 +39,13 @@ const useValidate = (FormData: any) => {
         }
     }
 
-    const forceValidate = (formValues,isModForm:boolean=true) =>{
+    const forceValidate = (formValues: any,isModForm:boolean=true) =>{
         Object.entries(formValues).forEach(([name,value])=>{
             validate({target:{name,value}},false,( isModForm ? (Object.values(formValues).length) + 1 : (Object.values(formValues).length) ))
         })
     }
     
-    const validate = ({target:{name,value}},single:boolean=true,formLength:number=1) => {
+    const validate = ({target:{name,value}}:{target:{name:any,value:any}},single:boolean=true,formLength:number=1) => {
         let i = 0
         Object.entries<FormDataInterface>(FormData).forEach(([Name,Value]: [String, FormDataInterface]) => {
             i += 1

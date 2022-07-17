@@ -10,7 +10,7 @@ const calcPaginationRange = (PaginationRange:number[],maxPages: number) : number
     return fixedPaginationRange
 }
 
-const calcPages = (posts,PostsPerPage) : number => {
+const calcPages = (posts: number,PostsPerPage: number) : number => {
     let pages = parseInt((posts / PostsPerPage).toString())
 
     if((posts % PostsPerPage) > 0) pages+=1;
@@ -18,7 +18,7 @@ const calcPages = (posts,PostsPerPage) : number => {
     return pages;
 }
 
-const calcPage = (pageNum , pages) : number => {
+const calcPage = (pageNum: number , pages: number) : number => {
     let page = pageNum
 
     if(pageNum > pages) page = 1;
