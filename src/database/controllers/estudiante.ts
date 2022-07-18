@@ -1,12 +1,12 @@
 import Database from "tauri-plugin-sql-api"
-import fs from 'fs'
+import { fs } from "@tauri-apps/api"
 import Estudiante from "../../interfaces/Estudiante"
 
 const estudianteControllers = {
     async init(){
         const db = await Database.load(process.env.DATABASE_URL)
 
-        const value = await db.execute(fs.readFileSync('../sql/CreateEstudiante.sql').toString())
+        const value = await db.execute(await fs.readTextFile('../sql/CreateEstudiante.sql'))
         return value
     },
     async getAll(){

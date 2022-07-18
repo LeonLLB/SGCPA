@@ -1,12 +1,12 @@
 import Database from "tauri-plugin-sql-api"
-import fs from 'fs'
+import {fs} from '@tauri-apps/api'
 import PNF from "../../interfaces/PNF"
 
 const pnfControllers = {
     async init(){
         let db = await Database.load(process.env.DATABASE_URL)
 
-        const value = await db.execute(fs.readFileSync('../sql/CreatePNF.sql').toString())
+        const value = await db.execute(await fs.readTextFile('../sql/CreatePNF.sql'))
         db = undefined
         return value
     },
