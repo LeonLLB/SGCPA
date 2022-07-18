@@ -1,5 +1,5 @@
 interface Estudiante{
-    id: number,
+    id?: number,
     nombre: string,
     apellido: string,
     cedula: number,

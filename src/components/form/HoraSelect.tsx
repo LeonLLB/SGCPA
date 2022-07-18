@@ -10,7 +10,7 @@ interface HoraSelectProps {
     error: FormError,
     isCol?: boolean,
     label: string,
-    turno: 'M' | 'T',
+    turno: string,
     required:boolean,
     name:string
 }

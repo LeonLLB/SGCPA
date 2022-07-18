@@ -1,5 +1,4 @@
 import { FormEvent, ChangeEvent, FC } from "react"
-import Docente from "../../interfaces/Docente"
 import PNF from "../../interfaces/PNF"
 import FormInput from "../ui/FormInput"
 import AulaSelect from "./AulaSelect"
@@ -9,7 +8,6 @@ import TrayectoSelect from "./TrayectoSelect"
 
 interface formProps {
     PNFListado: PNF[],
-    DocenteListado: Docente[],
     onFormSubmit: (e:FormEvent)=>void,
     onInputChange: (e:ChangeEvent)=>void,
     validate: (e:any)=>void,

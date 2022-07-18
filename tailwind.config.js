@@ -1,9 +1,9 @@
 module.exports = {
     presets: [],
     content: [
-      "./pages/**/*.{js,jsx,ts,tsx}",
-      "./components/**/*.{js,jsx,ts,tsx}",
-      "./test_models/**/*.{js,ts}"
+      "./src/pages/**/*.{js,jsx,ts,tsx}",
+      "./src/components/**/*.{js,jsx,ts,tsx}",
+      "./src/test_models/**/*.{js,ts}"
     ],
     darkMode: 'media', // or 'class'
     theme: {
