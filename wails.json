@@ -1,0 +1,12 @@
+{
+  "name": "sgcpa",
+  "outputfilename": "sgcpa",
+  "frontend:install": "yarn install",
+  "frontend:build": "yarn build",
+  "frontend:dev:watcher": "yarn dev",
+  "frontend:dev:serverUrl": "auto",
+  "author": {
+    "name": "Leonard Velásquez",
+    "email": "leonard.avp@gmail.com"
+  }
+}
