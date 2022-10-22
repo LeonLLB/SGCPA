@@ -13,9 +13,9 @@ const Header = () => {
     }
 
   return (
-    <header className="z-50 bg-blue-500 flex flex-row w-full">
+    <header className="z-50 bg-blue-500 flex flex-row w-full py-1">
         <button onClick={toggleSidebar}>
-            <span className="material-icons !text-2xl">menu</span>
+            <span className="material-icons !text-3xl">menu</span>
         </button>
         <div className="flex flex-row w-full items-center justify-center">
             <h1 className="text-lg sm:text-xl text-center md:text-2xl">Sistema de Gestión y Control de Proyectos Académicos SGCPA</h1>

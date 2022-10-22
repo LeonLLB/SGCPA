@@ -2,6 +2,7 @@ import { MouseEvent } from "react";
 import useElementAsyncTransition from "../../hooks/useElementAsyncTransition";
 import SidebarGroupItemHeader from "./SidebarGroupItemHeader";
 import SidebarItem from "./SidebarItem";
+import {useNavigate, useLocation} from 'react-router-dom'
 
 const Sidebar = ({ closing, onClose }: { closing: boolean, onClose: () => void }) => {
 
@@ -12,6 +13,8 @@ const Sidebar = ({ closing, onClose }: { closing: boolean, onClose: () => void }
 	const presentacionesItemState = useElementAsyncTransition(300)
 	const proyectosItemState = useElementAsyncTransition(300)
 	const adminItemState = useElementAsyncTransition(300)
+	const navigate = useNavigate()
+	const location = useLocation()
 
 	const onSidebarClose = (event: MouseEvent) => {
 		event.preventDefault();
@@ -19,7 +22,8 @@ const Sidebar = ({ closing, onClose }: { closing: boolean, onClose: () => void }
 	}
 
 	const onSidebarItemClick = (link: string) => {
-		// router.push(link)
+		navigate(link,{replace:true})
+		console.log(location.pathname)
 		onClose()
 	}
 
