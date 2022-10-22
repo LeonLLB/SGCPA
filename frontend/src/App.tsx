@@ -1,27 +1,26 @@
-import {useState} from 'react';
-import logo from './assets/images/logo-universal.png';
-import './App.css';
-import {Greet} from "../wailsjs/go/main/App";
+import Header from "./components/ui/Header"
+import Sidebar from "./components/ui/Sidebar"
+import { SidebarContext } from "./contexts/SidebarContext"
+import useElementAsyncTransition from "./hooks/useElementAsyncTransition"
 
 function App() {
-    const [resultText, setResultText] = useState("Please enter your name below 👇");
-    const [name, setName] = useState('');
-    const updateName = (e: any) => setName(e.target.value);
-    const updateResultText = (result: string) => setResultText(result);
-
-    function greet() {
-        Greet(name).then(updateResultText);
-    }
+    const sidebarState = useElementAsyncTransition(300)
 
     return (
-        <div id="App">
-            <img src={logo} id="logo" alt="logo"/>
-            <div id="result" className="result">{resultText}</div>
-            <div id="input" className="input-box">
-                <input id="name" className="input" onChange={updateName} autoComplete="off" name="input" type="text"/>
-                <button className="btn" onClick={greet}>Greet</button>
-            </div>
-        </div>
+      <>
+        <div className="flex flex-col scroll-smooth">
+          <SidebarContext.Provider value={sidebarState}>
+            <Header/>
+            { sidebarState.Visible &&
+              <Sidebar closing={sidebarState.Closing} onClose={sidebarState.Interaction}/>
+            }
+          </SidebarContext.Provider>
+          <div className='mx-8 scroll-smooth'>
+            <p>Hidsadasadsss!</p>
+            {/* <Component {...pageProps} />     */}
+          </div>
+        </div> 
+      </>
     )
 }
 
