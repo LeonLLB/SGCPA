@@ -4,4 +4,6 @@ import {database} from '../models';
 
 export function Create(arg1:database.PNF):Promise<{[key: string]: any}>;
 
+export function Delete(arg1:number):Promise<{[key: string]: any}>;
+
 export function GetAll():Promise<Array<database.PNF>>;

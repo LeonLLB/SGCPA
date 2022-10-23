@@ -38,3 +38,17 @@ func (p *PNF) GetAll() []PNF {
 	}
 	return pnfs
 }
+
+func (p *PNF) Delete(id int) map[string]interface{} {
+	db := GetDB()
+	r := db.Delete(&PNF{}, id)
+	m := make(map[string]interface{})
+	if r.Error != nil {
+		m["error"] = r.Error
+		m["ok"] = false
+		return m
+	}
+	m["rows"] = r.RowsAffected
+	m["ok"] = true
+	return m
+}

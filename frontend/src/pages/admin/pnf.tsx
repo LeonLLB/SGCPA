@@ -6,7 +6,7 @@ import useElementAsyncTransition from "../../hooks/useElementAsyncTransition"
 import useForm from "../../hooks/useForm";
 import useValidate from "../../hooks/useValidate";
 import {translateDbError} from '../../helpers/dbError'
-import * as PNFControllers from '../../../wailsjs/go/database/PNF'
+import * as PNFController from '../../../wailsjs/go/database/PNF'
 import { database } from "../../../wailsjs/go/models";
 
 const PNFMain = () => {
@@ -18,13 +18,15 @@ const PNFMain = () => {
 	const [pnfList, setPnfList] = useState<database.PNF[]>([])
 
 	useEffect(()=>{		
-		
+		getPnf()
 	},[])
 
 	const getPnf = () => {
+		const toast = cogoToast.loading('Obteniendo PNF')
 		setLoading(true)
-		PNFControllers.GetAll()
+		PNFController.GetAll()
 		.then((data)=>{
+			toast.hide!()
 			setPnfList(data)
 			setLoading(false)
 		})
@@ -49,7 +51,7 @@ const PNFMain = () => {
 		event.preventDefault()
 		if(isItValid()){
 			const toast = cogoToast.loading('Registrando PNF')
-			PNFControllers.Create({
+			PNFController.Create({
 				...Form
 			}).then((result)=>{
 				toast.hide!()
@@ -57,9 +59,9 @@ const PNFMain = () => {
 					modalState.Interaction()
 					reset()
 					cogoToast.success('PNF Registrado con exito!')
+					getPnf()
 					return
 				}
-				console.log(result)
 				cogoToast.error(translateDbError(result['error']['Code']))
 			})
 			return
@@ -81,7 +83,17 @@ const PNFMain = () => {
 	}
 
 	const onPNFDelete = () => {
-		
+		PNFController.Delete(PNFID)
+		.then((result)=>{
+			confirmModalState.Interaction()
+			getPnf()
+			setPNFID(0)
+			if(result['ok']){
+				cogoToast.success('PNF Eliminado con exito')
+				return
+			}
+			cogoToast.error(translateDbError(result['error']['Code']))
+		})
 	}
 
 	return (
@@ -90,7 +102,7 @@ const PNFMain = () => {
 				<div className="flex flex-col items-center space-y-4 justify-center">
 
 					<h2>Listado de Programas Nacionales de Formación</h2>
-					<table className="w-full h-full text-center border-collapse border-2 border-gray-500">
+					{!loading && <table className="w-full h-full text-center border-collapse border-2 border-gray-500">
 						<thead>
 							<tr>
 								<th className="td-pnf">PNF</th>
@@ -103,20 +115,20 @@ const PNFMain = () => {
 							<tr>
 								<td colSpan={4} className="td-pnf"><button onClick={modalState.Interaction} className="px-4 py-2 bg-blue-400 duration-300 border-2 border-blue-500 transition-colors hover:bg-blue-600 hover:border-blue-400 rounded-lg">Añadir PNF</button></td>
 							</tr>
-							{/* {	(props.listado !== null && props.listado.length > 0) && props.listado.map(PNF=>
-								<tr>
+							{	(pnfList !== null && pnfList.length > 0) && pnfList.map(PNF=>
+								<tr key={PNF.id}>
 									<td className="td-pnf font-semibold">{PNF.nombre}</td>
 									<td className="td-pnf font-semibold">0</td>
 									<td className="td-pnf font-semibold">{PNF.codigo}</td>
 									<td className="td-pnf font-semibold">
-										<button onClick={(e)=>onPNFPreDelete(e,PNF.id)}>
+										<button onClick={(e)=>onPNFPreDelete(e,PNF.id!)}>
 											<span className="material-icons text-3xl">delete</span>
 										</button>
 									</td>
 								</tr>	
-							)} */}
+							)}
 						</tbody>
-					</table>
+					</table>}
 				</div>
 			</div>
 			{	modalState.Visible &&
