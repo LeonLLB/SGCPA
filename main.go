@@ -3,7 +3,7 @@ package main
 import (
 	"embed"
 
-	models "main/models"
+	database "main/database"
 
 	"github.com/wailsapp/wails/v2"
 	"github.com/wailsapp/wails/v2/pkg/options"
@@ -14,10 +14,11 @@ var assets embed.FS
 
 func main() {
 
-	models.MigrateAll()
+	database.MigrateAll()
 	// Create an instance of the app structure
 	app := NewApp()
-	docente := models.Docente{}
+	docente := database.Docente{}
+	pnf := database.PNF{}
 
 	// Create application with options
 	err := wails.Run(&options.App{
@@ -30,7 +31,7 @@ func main() {
 		Bind: []interface{}{
 			app,
 			&docente,
-			// &models.Estudiante{},
+			&pnf,
 		},
 		DisableResize: true,
 	})

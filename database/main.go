@@ -1,19 +1,12 @@
-package models
+package database
 
 import (
 	"gorm.io/driver/sqlite"
 	"gorm.io/gorm"
 )
 
-type Test struct {
-	ID     uint `gorm:"primarykey"`
-	Code   string
-	Price  uint
-	Pingas uint
-}
-
 func GetDB() *gorm.DB {
-	db, err := gorm.Open(sqlite.Open("test.db"), &gorm.Config{})
+	db, err := gorm.Open(sqlite.Open("sgcpa.db"), &gorm.Config{})
 	if err != nil {
 		panic("failed to connect database")
 	}
@@ -24,9 +17,9 @@ func GetDB() *gorm.DB {
 func MigrateAll() {
 
 	GetDB().AutoMigrate(
-		&Test{},
 		&Estudiante{},
 		&Docente{},
+		&PNF{},
 	)
 
 }

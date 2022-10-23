@@ -1,6 +1,6 @@
-package models
+package database
 
-type Docente struct {
+type Estudiante struct {
 	ID        uint   `gorm:"primarykey"`
 	Nombre    string `gorm:"notNull"`
 	Apellido  string `gorm:"notNull"`
@@ -8,10 +8,8 @@ type Docente struct {
 	Correo    string
 	Telefono  string
 	Direccion string `gorm:"notNull"`
+	Pnf       string `gorm:"notNull"`
 	Activo    bool   `gorm:"notNull;default:true"`
-	// cargaAcademica CargaAcademica[]
-	// asesorDe Jurado[] @relation("docente")
-	// metodologoDe Jurado[] @relation("metodologo")
-	// academicoDe Jurado[] @relation("academico")
-	// adicionalDe Jurado[] @relation("adicional")
+	Trayecto  uint   `gorm:"notNull"`
+	// proyectos Proyecto[]
 }

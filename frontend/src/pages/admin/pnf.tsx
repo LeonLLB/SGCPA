@@ -1,18 +1,37 @@
-import { ChangeEvent, MouseEvent, useState } from "react";
+import { ChangeEvent, MouseEvent, useEffect, useState } from "react";
+import cogoToast from "cogo-toast";
 import FormInput from "../../components/ui/FormInput"
 import Modal from "../../components/ui/Modal"
 import useElementAsyncTransition from "../../hooks/useElementAsyncTransition"
 import useForm from "../../hooks/useForm";
 import useValidate from "../../hooks/useValidate";
+import {translateDbError} from '../../helpers/dbError'
+import * as PNFControllers from '../../../wailsjs/go/database/PNF'
+import { database } from "../../../wailsjs/go/models";
 
 const PNFMain = () => {
 
 	const modalState = useElementAsyncTransition(200)
 	const confirmModalState = useElementAsyncTransition(200)
 	const [PNFID, setPNFID] = useState(0)
+	const [loading, setLoading] = useState(true)
+	const [pnfList, setPnfList] = useState<database.PNF[]>([])
+
+	useEffect(()=>{		
+		
+	},[])
+
+	const getPnf = () => {
+		setLoading(true)
+		PNFControllers.GetAll()
+		.then((data)=>{
+			setPnfList(data)
+			setLoading(false)
+		})
+	}
 
 	const {Errors,isItValid, validate} = useValidate({
-		pnf: {
+		nombre: {
 			required:true,
 		},
 		codigo: {
@@ -21,23 +40,36 @@ const PNFMain = () => {
 		}
 	  })
 
-	const [Form, onInputChange,,changeForm] = useForm({
-    	pnf: "",
+	const [Form, onInputChange,reset,changeForm] = useForm({
+    	nombre: "",
 		codigo:"",
   	},(e)=>{validate(e)})
 
 	const onFormSubmit = (event: MouseEvent) => {
 		event.preventDefault()
 		if(isItValid()){
-			
+			const toast = cogoToast.loading('Registrando PNF')
+			PNFControllers.Create({
+				...Form
+			}).then((result)=>{
+				toast.hide!()
+				if(result['id']){
+					modalState.Interaction()
+					reset()
+					cogoToast.success('PNF Registrado con exito!')
+					return
+				}
+				console.log(result)
+				cogoToast.error(translateDbError(result['error']['Code']))
+			})
 			return
 		}
-	}
+	}	
 
 	const onPNFChange = (event: ChangeEvent<HTMLInputElement>) => {
 		event.preventDefault()
 		changeForm({
-			pnf:event.target.value,
+			nombre:event.target.value,
 			codigo:event.target.value.split('').map((item,i)=>{if(i>2)return;else return item}).join('')
 		})
 	}
@@ -92,11 +124,11 @@ const PNFMain = () => {
 					<div className="flex flex-col space-y-2">
 						<form className="flex flex-col space-y-2">
 							<FormInput
-								value={Form.pnf}
+								value={Form.nombre}
 								onInputChange={onPNFChange}
 								onBlur={validate}
-								errors={(Errors.pnf !== undefined || Errors.pnf !== null) ? Errors.pnf : null}
-								name="pnf"
+								errors={(Errors.nombre !== undefined || Errors.nombre !== null) ? Errors.nombre : null}
+								name="nombre"
 								label="PNF:"
 								type="text"
 							/>
