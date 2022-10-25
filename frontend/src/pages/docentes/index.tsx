@@ -1,4 +1,4 @@
-import {useEffect, useState, MouseEvent} from 'react'
+import { useEffect, useState, MouseEvent } from 'react'
 import { useNavigate } from 'react-router-dom'
 import FormInput from '../../components/ui/FormInput'
 import Modal from '../../components/ui/Modal'
@@ -6,13 +6,15 @@ import useElementAsyncTransition from '../../hooks/useElementAsyncTransition'
 import useForm from '../../hooks/useForm'
 import Docente from '../../interfaces/Docente'
 import * as DocenteController from '../../../wailsjs/go/database/Docente'
+import cogoToast from 'cogo-toast'
+import { translateDbError } from '../../helpers/dbError'
 
 const DocentesMain = () => {
 
   const [docentes, setDocentes] = useState<Docente[]>([])
   const navigate = useNavigate()
   const [DocenteId, setDocenteId] = useState<number | null>(null)
-  const [docentesPorPagina, setDocentesPorPagina] = useState("") 
+  const [docentesPorPagina, setDocentesPorPagina] = useState("")
   const confirmModalState = useElementAsyncTransition(200)
 
   const [Form, onInputChange, reset] = useForm({
@@ -28,61 +30,53 @@ const DocentesMain = () => {
     filterDocentes(true)
   }, [])
 
-  const onDocentePreDelete = (event:MouseEvent,id:number) => {
-		event.preventDefault()
-		setDocenteId(id)
-		confirmModalState.Interaction()
-	}
+  const onDocentePreDelete = (event: MouseEvent, id: number) => {
+    event.preventDefault()
+    setDocenteId(id)
+    confirmModalState.Interaction()
+  }
 
-	const onDocenteDelete = () => {
-		// const toastReference = toast.loading('Eliminando docente...')
-    // fetch('/api/docentes',{
-		// 	method:'DELETE',
-		// 	headers:{
-		// 		'Content-Type':'application/json'
-		// 	},
-		// 	body:JSON.stringify({id:DocenteId})
-		// })
-		// .then(res=>res.json())
-		// .then(res=>{
-		// 	if(res.isOk){
-		// 		toast.update(toastReference,{closeButton:true,closeOnClick:true,render:res.result,type:'success',isLoading:false,autoClose:4000})
-    //     filterDocentes(true)
-    //     reset()
-    //   }
-		// 	else{
-		// 		toast.update(toastReference,{closeButton:true,closeOnClick:true,render:res.result,type:'error',isLoading:false,autoClose:4000})
-		// 	}
-		// 	setDocenteId(0)			
-		// 	confirmModalState.Interaction()
-		// })
-	}
+  const onDocenteDelete = () => {
+    const toast = cogoToast.loading('Eliminando docente...')
+    DocenteController.Delete(DocenteId!)
+      .then(result => {
+        toast.hide!()
+        setDocenteId(0)
+        confirmModalState.Interaction()
+        if (result['ok']) {
+          reset()
+          cogoToast.success('Docente eliminado con exito!')
+          filterDocentes(true)
+          return
+        }
+        cogoToast.error(translateDbError(result['error']['Code']))
+      })    
+  }
 
   const filterDocentes = (clean: boolean = false) => {
-    if(clean){
+    if (clean) {
       DocenteController.GetAll()
-      .then((docentesList)=>{
-        setDocentes(docentesList)
-      })
+        .then((docentesList) => {
+          setDocentes(docentesList)
+        })
       return
     }
-    //TODO FILTRADO
-    DocenteController.Filter({...Form,cedula:parseInt(Form.cedula)})
-    .then((docentesList)=>{
-      setDocentes(docentesList)
-    })
+    DocenteController.Filter({ ...Form, cedula: parseInt(Form.cedula) })
+      .then((docentesList) => {
+        setDocentes(docentesList)
+      })
   }
 
   return (
     <>
       <div className="mt-5 flex flex-row items-center justify-center">
-				<div className="w-full flex flex-col items-center space-y-4 justify-center">
+        <div className="w-full flex flex-col items-center space-y-4 justify-center">
 
-					<h2>Listado de Docentes</h2>
+          <h2>Listado de Docentes</h2>
           <span>Opciones de filtrado</span>
           <div className=' grid md:grid-cols-3 grid-cols-2 gap-2'>
-            <FormInput 
-              value={Form.nombre} 
+            <FormInput
+              value={Form.nombre}
               onInputChange={onInputChange}
               errors={null}
               name="nombre"
@@ -90,8 +84,8 @@ const DocentesMain = () => {
               isCol={true}
               type="text"
             />
-            <FormInput 
-              value={Form.apellido} 
+            <FormInput
+              value={Form.apellido}
               onInputChange={onInputChange}
               errors={null}
               name="apellido"
@@ -99,8 +93,8 @@ const DocentesMain = () => {
               isCol={true}
               type="text"
             />
-            <FormInput 
-              value={Form.cedula} 
+            <FormInput
+              value={Form.cedula}
               onInputChange={onInputChange}
               errors={null}
               name="cedula"
@@ -108,8 +102,8 @@ const DocentesMain = () => {
               isCol={true}
               type="text"
             />
-            <FormInput 
-              value={Form.correo} 
+            <FormInput
+              value={Form.correo}
               onInputChange={onInputChange}
               errors={null}
               name="correo"
@@ -117,8 +111,8 @@ const DocentesMain = () => {
               isCol={true}
               type="email"
             />
-            <FormInput 
-              value={Form.telefono} 
+            <FormInput
+              value={Form.telefono}
               onInputChange={onInputChange}
               errors={null}
               name="telefono"
@@ -126,8 +120,8 @@ const DocentesMain = () => {
               isCol={true}
               type="text"
             />
-            <FormInput 
-              value={Form.direccion} 
+            <FormInput
+              value={Form.direccion}
               onInputChange={onInputChange}
               errors={null}
               name="direccion"
@@ -136,9 +130,9 @@ const DocentesMain = () => {
               type="text"
             />
             <div className="flex flex-row justify-evenly col-span-2 md:col-span-3">
-              <button className='btn-info-primary' onClick={()=>{navigate('/docentes/registrar',{replace:true})}}>Añadir docente</button>
-              <button className='btn-info-primary' onClick={()=>{reset();filterDocentes(true)}}>Limpiar filtros</button>
-              <button className='btn-info-primary' onClick={()=>{filterDocentes()}}> Filtrar docentes </button>
+              <button className='btn-info-primary' onClick={() => { navigate('/docentes/registrar', { replace: true }) }}>Añadir docente</button>
+              <button className='btn-info-primary' onClick={() => { reset(); filterDocentes(true) }}>Limpiar filtros</button>
+              <button className='btn-info-primary' onClick={() => { filterDocentes() }}> Filtrar docentes </button>
             </div>
           </div>
           <div className='overflow-x-auto overflow-y-auto pb-2'>
@@ -153,9 +147,9 @@ const DocentesMain = () => {
                   <th className="td-pnf">Dirección</th>
                   <th className="td-pnf">Opciones</th>
                 </tr>
-              </thead>              
-              <tbody>							
-                {	(docentes !== null && docentes.length > 0) && docentes.map(docente=>
+              </thead>
+              <tbody>
+                {(docentes !== null && docentes.length > 0) && docentes.map(docente =>
                   <tr key={docente.id}>
                     <td className="td-pnf">{docente.nombre}</td>
                     <td className="td-pnf">{docente.apellido}</td>
@@ -164,31 +158,31 @@ const DocentesMain = () => {
                     <td className="td-pnf">{docente.telefono}</td>
                     <td className="td-pnf">{docente.direccion}</td>
                     <td className="td-pnf font-semibold">
-                      <button onClick={(e)=>{navigate(`/docentes/modificar/${docente.id}`,{replace:true})}}>
+                      <button onClick={(e) => { navigate(`/docentes/modificar/${docente.id}`, { replace: true }) }}>
                         <span className="material-icons text-3xl">edit</span>
                       </button>
-                      <button onClick={(e)=>{onDocentePreDelete(e,docente.id)}}>
+                      <button onClick={(e) => { onDocentePreDelete(e, docente.id) }}>
                         <span className="material-icons text-3xl">delete</span>
                       </button>
                     </td>
-                  </tr>	
+                  </tr>
                 )}
               </tbody>
             </table>
           </div>
-				</div>
-			</div>
-      { confirmModalState.Visible &&
+        </div>
+      </div>
+      {confirmModalState.Visible &&
         <Modal title="Confirmar eliminación" onClose={confirmModalState.Interaction} closing={confirmModalState.Closing}>
           <div className="flex flex-col space-y-2 items-center">
-            
+
             <span className="material-icons text-6xl text-red-600">warning</span>
 
             <span className="text-red-600 w-96">Esta seguro de querer eliminar este docente? Se eliminara tambien de los proyectos, jurados y cargas en los que haya participado</span>
-              
+
             <div className="flex flex-row space-x-5 w-full justify-end">
               <button onClick={onDocenteDelete} className="btn-danger-primary">Eliminar</button>
-              <button onClick={confirmModalState.Interaction} className="btn-danger-secondary">Cancelar</button>	
+              <button onClick={confirmModalState.Interaction} className="btn-danger-secondary">Cancelar</button>
             </div>
           </div>
         </Modal>
