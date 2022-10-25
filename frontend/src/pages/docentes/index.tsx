@@ -12,7 +12,7 @@ const DocentesMain = () => {
   const [docentes, setDocentes] = useState<Docente[]>([])
   const navigate = useNavigate()
   const [DocenteId, setDocenteId] = useState<number | null>(null)
-  const [loading, setLoading] = useState(true)
+  const [docentesPorPagina, setDocentesPorPagina] = useState("") 
   const confirmModalState = useElementAsyncTransition(200)
 
   const [Form, onInputChange, reset] = useForm({
@@ -22,7 +22,6 @@ const DocentesMain = () => {
     correo: "",
     telefono: "",
     direccion: "",
-    docentesPorPagina: ""
   })
 
   useEffect(() => {
@@ -60,18 +59,18 @@ const DocentesMain = () => {
 	}
 
   const filterDocentes = (clean: boolean = false) => {
-    setLoading(true)
     if(clean){
       DocenteController.GetAll()
       .then((docentesList)=>{
-        setLoading(false)
         setDocentes(docentesList)
       })
       return
     }
     //TODO FILTRADO
-    DocenteController.GetAll()
-    setLoading(false)    
+    DocenteController.Filter({...Form,cedula:parseInt(Form.cedula)})
+    .then((docentesList)=>{
+      setDocentes(docentesList)
+    })
   }
 
   return (

@@ -6,4 +6,6 @@ export function Create(arg1:database.Docente):Promise<{[key: string]: any}>;
 
 export function Delete(arg1:number):Promise<{[key: string]: any}>;
 
+export function Filter(arg1:database.Docente):Promise<Array<database.Docente>>;
+
 export function GetAll():Promise<Array<database.Docente>>;

@@ -49,6 +49,36 @@ func (d *Docente) GetAll() []Docente {
 	return dcnts
 }
 
+func (d *Docente) Filter(do Docente) []Docente {
+	db := GetDB()
+	var dcnts []Docente
+
+	var r *gorm.DB
+
+	if do.Cedula >= 1 {
+		r = db.
+			Where(map[string]interface{}{"cedula": do.Cedula}).
+			Where("nombre LIKE ?", "%"+do.Nombre+"%").
+			Where("apellido LIKE ?", "%"+do.Apellido+"%").
+			Where("correo LIKE ?", "%"+do.Correo+"%").
+			Where("telefono LIKE ?", "%"+do.Telefono+"%").
+			Where("direccion LIKE ?", "%"+do.Direccion+"%").
+			Find(&dcnts)
+	} else {
+		r = db.
+			Where("nombre LIKE ?", "%"+do.Nombre+"%").
+			Where("apellido LIKE ?", "%"+do.Apellido+"%").
+			Where("correo LIKE ?", "%"+do.Correo+"%").
+			Where("telefono LIKE ?", "%"+do.Telefono+"%").
+			Where("direccion LIKE ?", "%"+do.Direccion+"%").
+			Find(&dcnts)
+	}
+	if r.Error != nil {
+		fmt.Print(r.Error)
+	}
+	return dcnts
+}
+
 func (d *Docente) Delete(id int) map[string]interface{} {
 	db := GetDB()
 	r := db.Delete(&Docente{}, id)

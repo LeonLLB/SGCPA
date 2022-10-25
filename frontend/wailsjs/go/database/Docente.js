@@ -10,6 +10,10 @@ export function Delete(arg1) {
   return window['go']['database']['Docente']['Delete'](arg1);
 }
 
+export function Filter(arg1) {
+  return window['go']['database']['Docente']['Filter'](arg1);
+}
+
 export function GetAll() {
   return window['go']['database']['Docente']['GetAll']();
 }
