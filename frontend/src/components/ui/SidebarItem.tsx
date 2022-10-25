@@ -16,7 +16,7 @@ const SidebarItem: FC<sidebarItemProps> = ({icon, title, onClick = () => {},tiny
   }
   
   return (
-    <span onClick={onItemClick} className={`flex cursor-pointer py-4 flex-row items-center text-right justify-between ${isActive?"text-blue-400":""}`}>
+    <span onClick={onItemClick} className={`flex transition-all duration-300 cursor-pointer py-4 flex-row items-center text-right justify-between ${isActive?"text-blue-400":""}`}>
         <span className="material-icons">{icon}</span>
         <span className={(title.length < 12 && tiny === false ?"text-lg": (tiny ? 'text-sm' : '') )}>{title}</span>
     </span>
