@@ -7,7 +7,7 @@ import (
 )
 
 type PNF struct {
-	ID     uint   `gorm:"primarykey" json:"id,omitempty"`
+	ID     int    `gorm:"primarykey" json:"id,omitempty"`
 	Nombre string `gorm:"notNull;uniqueIndex:pnf_unique" json:"nombre"`
 	Codigo string `gorm:"notNull;uniqueIndex:pnf_unique" json:"codigo"`
 }

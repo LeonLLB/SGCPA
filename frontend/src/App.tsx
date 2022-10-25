@@ -22,6 +22,11 @@ function App() {
               <Routes>
                 <Route path="/" element={<p.MainPage/>}/>
                 <Route path="/admin/pnf" element={<p.PNFPage/>}/>
+                <Route path="/docentes">
+                  <Route index element={<p.DocentesMain/>}/>                
+                  <Route path="registrar" element={<p.AddDocente/>}/>
+                  <Route path="modificar/:docenteId" element={<p.DocenteModificar/>}/>                
+                </Route>
               </Routes>
           </div>
         </div> 

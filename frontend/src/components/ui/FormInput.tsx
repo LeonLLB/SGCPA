@@ -8,7 +8,7 @@ interface FormInputProps {
     classNameContainer?:string,
     classNameLabel?:string,
     classNameInput?:string,
-    errors: FormError,
+    errors: FormError | null,
     name: string,
     label: string,
     isCol?:boolean,
