@@ -164,7 +164,7 @@ const DocentesMain = () => {
                     <td className="td-pnf">{docente.telefono}</td>
                     <td className="td-pnf">{docente.direccion}</td>
                     <td className="td-pnf font-semibold">
-                      <button onClick={(e)=>{/* router.push(`/docentes/modificar/${docente.id}`) */}}>
+                      <button onClick={(e)=>{navigate(`/docentes/modificar/${docente.id}`,{replace:true})}}>
                         <span className="material-icons text-3xl">edit</span>
                       </button>
                       <button onClick={(e)=>{onDocentePreDelete(e,docente.id)}}>

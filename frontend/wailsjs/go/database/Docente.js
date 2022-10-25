@@ -17,3 +17,11 @@ export function Filter(arg1) {
 export function GetAll() {
   return window['go']['database']['Docente']['GetAll']();
 }
+
+export function GetOne(arg1) {
+  return window['go']['database']['Docente']['GetOne'](arg1);
+}
+
+export function Update(arg1, arg2) {
+  return window['go']['database']['Docente']['Update'](arg1, arg2);
+}

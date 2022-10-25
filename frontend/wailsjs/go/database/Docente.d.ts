@@ -9,3 +9,7 @@ export function Delete(arg1:number):Promise<{[key: string]: any}>;
 export function Filter(arg1:database.Docente):Promise<Array<database.Docente>>;
 
 export function GetAll():Promise<Array<database.Docente>>;
+
+export function GetOne(arg1:number):Promise<database.Docente>;
+
+export function Update(arg1:number,arg2:database.Docente):Promise<{[key: string]: any}>;

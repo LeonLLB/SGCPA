@@ -49,6 +49,34 @@ func (d *Docente) GetAll() []Docente {
 	return dcnts
 }
 
+func (d *Docente) GetOne(id int) Docente {
+	db := GetDB()
+	dcnt := Docente{ID: id}
+	r := db.First(&dcnt)
+	if r.Error != nil {
+		fmt.Print(r.Error)
+	}
+	return dcnt
+}
+
+func (d *Docente) Update(id int, ud Docente) map[string]interface{} {
+	db := GetDB()
+	m := make(map[string]interface{})
+
+	r := db.
+		Model(&Docente{}).
+		Where(Docente{ID: id}).
+		Updates(ud)
+
+	if r.Error != nil {
+		m["error"] = r.Error
+	} else {
+		m["id"] = id
+		m["rows"] = r.RowsAffected
+	}
+	return m
+}
+
 func (d *Docente) Filter(do Docente) []Docente {
 	db := GetDB()
 	var dcnts []Docente
