@@ -1,19 +1,18 @@
 import {useEffect, useState, MouseEvent} from 'react'
 import { useNavigate } from 'react-router-dom'
-// import { toast } from 'react-toastify'
 import FormInput from '../../components/ui/FormInput'
 import Modal from '../../components/ui/Modal'
 import useElementAsyncTransition from '../../hooks/useElementAsyncTransition'
 import useForm from '../../hooks/useForm'
 import Docente from '../../interfaces/Docente'
-// import prisma from "../../prismaClient"
+import * as DocenteController from '../../../wailsjs/go/database/Docente'
 
 const DocentesMain = () => {
-  // const primerListado = props.listado
 
-  const [listado, setListado] = useState<Docente[]>([])
+  const [docentes, setDocentes] = useState<Docente[]>([])
   const navigate = useNavigate()
-  const [DocenteId, setDocenteId] = useState(null)
+  const [DocenteId, setDocenteId] = useState<number | null>(null)
+  const [loading, setLoading] = useState(true)
   const confirmModalState = useElementAsyncTransition(200)
 
   const [Form, onInputChange, reset] = useForm({
@@ -26,15 +25,13 @@ const DocentesMain = () => {
     docentesPorPagina: ""
   })
 
-  // useEffect(() => {
-  //   if(primerListado !== null){
-  //     setListado(primerListado)
-  //   }
-  // }, [])
+  useEffect(() => {
+    filterDocentes(true)
+  }, [])
 
   const onDocentePreDelete = (event:MouseEvent,id:number) => {
 		event.preventDefault()
-		// setDocenteId(id)
+		setDocenteId(id)
 		confirmModalState.Interaction()
 	}
 
@@ -63,21 +60,18 @@ const DocentesMain = () => {
 	}
 
   const filterDocentes = (clean: boolean = false) => {
-    // const URL = (clean === false) ?
-    // `/api/docentes?nombre=${Form.nombre}&apellido=${Form.apellido}&ci=${Form.cedula}&correo=${Form.correo}&tlf=${Form.telefono}&direccion=${Form.direccion}` :
-    // `/api/docentes?nombre=&apellido=&ci=&correo=&tlf=&direccion=`;
-    // const toastReference = toast.loading('Filtrando docentes...')
-		// fetch(URL)
-		// .then(res=>res.json())
-		// .then(res=>{
-		// 	if(res.isOk){
-    //     setListado(res.data)
-		// 		toast.update(toastReference,{closeButton:true,closeOnClick:true,render:'Operación culminada',type:'info',isLoading:false,autoClose:4000})
-		// 	}
-		// 	else{
-		// 		toast.update(toastReference,{closeButton:true,closeOnClick:true,render:res.result,type:'error',isLoading:false,autoClose:4000})
-		// 	}
-		// })
+    setLoading(true)
+    if(clean){
+      DocenteController.GetAll()
+      .then((docentesList)=>{
+        setLoading(false)
+        setDocentes(docentesList)
+      })
+      return
+    }
+    //TODO FILTRADO
+    DocenteController.GetAll()
+    setLoading(false)    
   }
 
   return (
@@ -148,7 +142,7 @@ const DocentesMain = () => {
               <button className='btn-info-primary' onClick={()=>{filterDocentes()}}> Filtrar docentes </button>
             </div>
           </div>
-          <div className='overflow-x-auto pb-2'>
+          <div className='overflow-x-auto overflow-y-auto pb-2'>
             <table className="h-full text-center border-collapse border-2 border-gray-500">
               <thead>
                 <tr>
@@ -162,8 +156,7 @@ const DocentesMain = () => {
                 </tr>
               </thead>              
               <tbody>							
-                {/* {	(listado !== null && listado.length > 0) && listado.map(docente=> */}
-                {false && listado.map(docente=>
+                {	(docentes !== null && docentes.length > 0) && docentes.map(docente=>
                   <tr key={docente.id}>
                     <td className="td-pnf">{docente.nombre}</td>
                     <td className="td-pnf">{docente.apellido}</td>

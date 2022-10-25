@@ -1,10 +1,10 @@
+import cogoToast from "cogo-toast";
+import { useNavigate } from "react-router-dom";
 import useForm from "../../hooks/useForm";
 import useValidate from "../../hooks/useValidate";
 import DocenteForm from "../../components/form/DocenteForm";
 import * as DocenteController from '../../../wailsjs/go/database/Docente'
-import cogoToast from "cogo-toast";
 import { translateDbError } from "../../helpers/dbError";
-import { useNavigate } from "react-router-dom";
 
 const AddDocente = () => {  
 
