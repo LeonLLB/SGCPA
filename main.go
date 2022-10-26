@@ -19,6 +19,7 @@ func main() {
 	app := NewApp()
 	docente := database.Docente{}
 	pnf := database.PNF{}
+	carga := database.Carga{}
 
 	// Create application with options
 	err := wails.Run(&options.App{
@@ -32,6 +33,7 @@ func main() {
 			app,
 			&docente,
 			&pnf,
+			&carga,
 		},
 		DisableResize: true,
 	})

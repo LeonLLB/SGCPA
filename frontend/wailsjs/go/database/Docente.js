@@ -18,6 +18,10 @@ export function GetAll() {
   return window['go']['database']['Docente']['GetAll']();
 }
 
+export function GetAllForForm() {
+  return window['go']['database']['Docente']['GetAllForForm']();
+}
+
 export function GetOne(arg1) {
   return window['go']['database']['Docente']['GetOne'](arg1);
 }

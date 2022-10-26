@@ -7,15 +7,15 @@ import (
 )
 
 type Docente struct {
-	ID        int    `gorm:"primarykey" json:"id"`
-	Nombre    string `gorm:"notNull" json:"nombre"`
-	Apellido  string `gorm:"notNull" json:"apellido"`
-	Cedula    int    `gorm:"unique;notNull" json:"cedula"`
-	Correo    string `json:"correo"`
-	Telefono  string `json:"telefono"`
-	Direccion string `gorm:"notNull" json:"direccion"`
-	Activo    bool   `gorm:"notNull;default:true" json:"activo"`
-	// cargaAcademica CargaAcademica[]
+	ID        int     `gorm:"primarykey" json:"id,omitempty"`
+	Nombre    string  `gorm:"notNull" json:"nombre"`
+	Apellido  string  `gorm:"notNull" json:"apellido"`
+	Cedula    int     `gorm:"unique;notNull" json:"cedula"`
+	Correo    string  `json:"correo"`
+	Telefono  string  `json:"telefono"`
+	Direccion string  `gorm:"notNull" json:"direccion"`
+	Activo    bool    `gorm:"notNull;default:true" json:"activo"`
+	Cargas    []Carga ``
 	// asesorDe Jurado[] @relation("docente")
 	// metodologoDe Jurado[] @relation("metodologo")
 	// academicoDe Jurado[] @relation("academico")
@@ -37,6 +37,16 @@ func (d *Docente) Create(nd Docente) map[string]interface{} {
 		}
 	})
 	return m
+}
+
+func (d *Docente) GetAllForForm() []Docente {
+	db := GetDB()
+	var dcnts []Docente
+	r := db.Omit("cedula", "correo", "telefono", "direccion", "activo").Find(&dcnts)
+	if r.Error != nil {
+		fmt.Print(r.Error)
+	}
+	return dcnts
 }
 
 func (d *Docente) GetAll() []Docente {
@@ -78,7 +88,12 @@ func (d *Docente) Update(id int, ud Docente) map[string]interface{} {
 }
 
 func (d *Docente) Filter(do Docente) []Docente {
-	db := GetDB()
+	db := GetDB().
+		Where("nombre LIKE ?", "%"+do.Nombre+"%").
+		Where("apellido LIKE ?", "%"+do.Apellido+"%").
+		Where("correo LIKE ?", "%"+do.Correo+"%").
+		Where("telefono LIKE ?", "%"+do.Telefono+"%").
+		Where("direccion LIKE ?", "%"+do.Direccion+"%")
 	var dcnts []Docente
 
 	var r *gorm.DB
@@ -86,20 +101,9 @@ func (d *Docente) Filter(do Docente) []Docente {
 	if do.Cedula >= 1 {
 		r = db.
 			Where(map[string]interface{}{"cedula": do.Cedula}).
-			Where("nombre LIKE ?", "%"+do.Nombre+"%").
-			Where("apellido LIKE ?", "%"+do.Apellido+"%").
-			Where("correo LIKE ?", "%"+do.Correo+"%").
-			Where("telefono LIKE ?", "%"+do.Telefono+"%").
-			Where("direccion LIKE ?", "%"+do.Direccion+"%").
 			Find(&dcnts)
 	} else {
-		r = db.
-			Where("nombre LIKE ?", "%"+do.Nombre+"%").
-			Where("apellido LIKE ?", "%"+do.Apellido+"%").
-			Where("correo LIKE ?", "%"+do.Correo+"%").
-			Where("telefono LIKE ?", "%"+do.Telefono+"%").
-			Where("direccion LIKE ?", "%"+do.Direccion+"%").
-			Find(&dcnts)
+		r = db.Find(&dcnts)
 	}
 	if r.Error != nil {
 		fmt.Print(r.Error)

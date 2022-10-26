@@ -20,6 +20,7 @@ func MigrateAll() {
 		&Estudiante{},
 		&Docente{},
 		&PNF{},
+		&Carga{},
 	)
 
 }

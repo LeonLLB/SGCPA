@@ -4,14 +4,14 @@ import FormInput from '../../components/ui/FormInput'
 import Modal from '../../components/ui/Modal'
 import useElementAsyncTransition from '../../hooks/useElementAsyncTransition'
 import useForm from '../../hooks/useForm'
-import Docente from '../../interfaces/Docente'
 import * as DocenteController from '../../../wailsjs/go/database/Docente'
 import cogoToast from 'cogo-toast'
 import { translateDbError } from '../../helpers/dbError'
+import { database } from '../../../wailsjs/go/models'
 
 const DocentesMain = () => {
 
-  const [docentes, setDocentes] = useState<Docente[]>([])
+  const [docentes, setDocentes] = useState<database.Docente[]>([])
   const navigate = useNavigate()
   const [DocenteId, setDocenteId] = useState<number | null>(null)
   const [docentesPorPagina, setDocentesPorPagina] = useState("")
@@ -161,7 +161,7 @@ const DocentesMain = () => {
                       <button onClick={(e) => { navigate(`/docentes/modificar/${docente.id}`, { replace: true }) }}>
                         <span className="material-icons text-3xl">edit</span>
                       </button>
-                      <button onClick={(e) => { onDocentePreDelete(e, docente.id) }}>
+                      <button onClick={(e) => { onDocentePreDelete(e, docente.id!) }}>
                         <span className="material-icons text-3xl">delete</span>
                       </button>
                     </td>

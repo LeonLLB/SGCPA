@@ -1,11 +1,11 @@
-import { ChangeEvent, FC } from "react"
+import { ChangeEvent, FC, useEffect, useState } from "react"
 import FormError from "../../interfaces/formError"
-import Docente from "../../interfaces/Docente"
+import { database } from "../../../wailsjs/go/models"
+import * as DocenteController from "../../../wailsjs/go/database/Docente"
 
 interface DocentesSelectProps {
-    onInputChange: (e:ChangeEvent)=>void,
+    onInputChange: (e:ChangeEvent<HTMLSelectElement>)=>void,
     onBlur?: (e:any)=>void,
-    docenteList: Docente[],
     value:string,
     className?: string,
     error: FormError,
@@ -15,8 +15,14 @@ interface DocentesSelectProps {
     name?:string
 }
 
-const DocentesSelect: FC<DocentesSelectProps> = ({name="docenteID",label = "Docente:",isCol = false,error,docenteList,required,onInputChange,value,className,onBlur}) => {
-  
+const DocentesSelect: FC<DocentesSelectProps> = ({name="docenteID",label = "Docente:",isCol = false,error,required,onInputChange,value,className,onBlur}) => {
+    const [docenteList, setDocenteList] = useState<database.Docente[]>([])
+
+    useEffect(() => {
+      DocenteController.GetAll().then(setDocenteList)
+    }, [])
+    
+
     return (
     <>
         <span className={`flex ${isCol?"flex-col":"flex-row"} items-center justify-end space-x-2`}>

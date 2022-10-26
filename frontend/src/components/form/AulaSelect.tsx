@@ -3,7 +3,7 @@ import FormError from "../../interfaces/formError"
 
 
 interface AulaSelectProps {
-    onInputChange: (e:ChangeEvent)=>void,
+    onInputChange: (e:ChangeEvent<HTMLSelectElement>)=>void,
     onBlur?: (e:any)=>void,
     value:string,
     className?: string,

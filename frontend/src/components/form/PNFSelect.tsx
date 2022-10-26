@@ -1,11 +1,11 @@
-import { ChangeEvent, FC } from "react"
+import { ChangeEvent, FC, useEffect, useState } from "react"
 import FormError from "../../interfaces/formError"
-import PNF from "../../interfaces/PNF"
+import * as PNFController from '../../../wailsjs/go/database/PNF'
+import { database } from "../../../wailsjs/go/models"
 
 interface PNFSelectProps {
-    onInputChange: (e:ChangeEvent)=>void,
+    onInputChange: (e:ChangeEvent<HTMLSelectElement>)=>void,
     onBlur?: (e:any)=>void,
-    pnfList: PNF[],
     value:string,
     className?: string,
     error: FormError,
@@ -14,8 +14,13 @@ interface PNFSelectProps {
     required:boolean
 }
 
-const PNFSelect: FC<PNFSelectProps> = ({label = "Programa Nacional de Formación:",isCol = false,error,pnfList,required,onInputChange,value,className,onBlur}) => {
-  
+const PNFSelect: FC<PNFSelectProps> = ({label = "Programa Nacional de Formación:",isCol = false,error,required,onInputChange,value,className,onBlur}) => {
+    const [pnfList, setPnfList] = useState<database.PNF[]>([])
+
+    useEffect(() => {
+      PNFController.GetAll().then((pnfs)=>setPnfList(pnfs))    
+    }, [])    
+
     return (
     <>
         <span className={`flex ${isCol?"flex-col":"flex-row"} items-center justify-end space-x-2`}>

@@ -2,7 +2,7 @@ import { ChangeEvent, FC } from "react"
 import FormError from "../../interfaces/formError"
 
 
-interface DiaSelectProps {
+interface HoraSelectProps {
     onInputChange: (e:ChangeEvent<HTMLSelectElement>)=>void,
     onBlur?: (e:any)=>void,
     value:string,
@@ -10,13 +10,33 @@ interface DiaSelectProps {
     error: FormError,
     isCol?: boolean,
     label: string,
-    name: string,
-    required:boolean
+    turno: 'M' | 'T' | '',
+    required:boolean,
+    name:string
 }
 
-const DiaSelect: FC<DiaSelectProps> = ({name,label,isCol=false,error,required,onInputChange,value,className,onBlur}) => {
+const HoraSelect: FC<HoraSelectProps> = ({name,turno,label,isCol=false,error,required,onInputChange,value,className,onBlur}) => {
   
-    const dias = ['Lunes','Martes','Miercoles','Jueves','Viernes']
+    const horario = {
+        M:[
+            '07:00',
+            '07:50',
+            '08:40',
+            '09:30',
+            '10:20',
+            '11:10',
+            '12:00',
+        ],
+        T:[
+            '12:30',
+            '01:20',
+            '02:10',
+            '03:00',
+            '03:50',
+            '04:40',
+            '05:30', 
+        ],
+    }
   
     return (
     <>
@@ -25,8 +45,8 @@ const DiaSelect: FC<DiaSelectProps> = ({name,label,isCol=false,error,required,on
             <div className="border border-gray-400 p-1 rounded-xl">
                 <select onBlur={onBlur} value={value} className={` h-full transition-colors duration-200 focus:border-2 focus:bg-gray-200 focus:border-blue-500 outline-none p-2 rounded-lg border-2 border-gray-400 bg-gray-300 focus:outline-none focus:shadow-outline ${className}`} onChange={onInputChange} name={name} id={name}>
                     <option value="" disabled={required}></option>
-                    {   dias.map((dia,i)=>
-                        <option key={i} value={dia}>{dia}</option>
+                    {  (turno !== '' && turno !== null) && horario[turno].map((hora,i)=>
+                        <option key={i} value={hora}>{hora}</option>
                     )}
                 </select>    
             </div>    
@@ -60,4 +80,4 @@ const DiaSelect: FC<DiaSelectProps> = ({name,label,isCol=false,error,required,on
   )
 }
 
-export default DiaSelect
+export default HoraSelect
