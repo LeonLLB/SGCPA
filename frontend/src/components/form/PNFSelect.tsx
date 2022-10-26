@@ -8,7 +8,7 @@ interface PNFSelectProps {
     onBlur?: (e:any)=>void,
     value:string,
     className?: string,
-    error: FormError,
+    error: FormError | null,
     isCol?: boolean,
     label?: string,
     required:boolean

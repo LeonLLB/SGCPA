@@ -1,13 +1,22 @@
-import { useRouter } from "next/router"
-import { toast } from "react-toastify"
+import cogoToast from "cogo-toast"
 import CargaForm from "../../components/form/CargaForm"
 import useForm from "../../hooks/useForm"
 import useValidate from "../../hooks/useValidate"
-import prisma from "../../prismaClient"
+import * as CargasController from '../../../wailsjs/go/database/Carga'
+import { translateDbError } from "../../helpers/dbError"
+import { useNavigate } from "react-router-dom"
+
+export const createHorario = (dia:string,entrada:string,salida:string): string | undefined =>{
+    if(dia !== '' && entrada !== '' && salida !== ''){
+        return `${dia}T${entrada}-${salida}`
+    }
+    return undefined
+}
+
+const RegistrarCarga = () => {
 
 
-const RegistrarCarga = (props) => {
-    const router = useRouter()
+    const navigate = useNavigate()
 
     const { Errors, isItValid, validate } = useValidate({
         periodo: {
@@ -85,49 +94,33 @@ const RegistrarCarga = (props) => {
         horario2salida: "",
     }, (event) => { validate(event) })
 
-    const onFormSubmit = (event) => {
+    const onFormSubmit = (event: any) => {
         event.preventDefault()
         if (isItValid()) {
-            const toastReference = toast.loading('Inscribiendo carga...')
-            fetch('/api/cargas', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(Form)
-            })
-                .then(res => res.json())
-                .then(res => {
-                    if (res.isOk) {
-                        toast.update(toastReference, { closeButton: true, closeOnClick: true, render: res.result, type: 'success', isLoading: false, autoClose: 4000 })
-                        router.push('/cargas')
-                    }
-                    else {
-                        toast.update(toastReference, { closeButton: true, closeOnClick: true, render: res.motive, type: 'error', isLoading: false, autoClose: 4000 })
-                    }
-                })
+            const toast = cogoToast.loading('Inscribiendo carga...')
+            CargasController.Create({
+                periodo: Form.periodo,
+                pnf: Form.pnf,
+                trayecto: parseInt(Form.trayecto),
+                turno: Form.turno,
+                aula: parseInt(Form.aula),
+                docenteId: parseInt(Form.docenteID),
+                horario1:createHorario(Form.dia1, Form.horario1entrada, Form.horario1salida)!,
+                horario2:createHorario(Form.dia2, Form.horario2entrada, Form.horario2salida),
+            } as any)
+            .then(result=>{
+                toast.hide!()
+				if(result['id']){
+					cogoToast.success('Carga registrada con exito!')
+                    navigate('/cargas',{replace:true})
+					return
+				}
+				cogoToast.error(translateDbError(result['error']['Code']))
+            })       
         } else {
-            toast.error('El formulario no es valido, esta vació o faltan valores requeridos.')
+            cogoToast.error('El formulario no es valido, esta vació o faltan valores requeridos.')
         }
-    }
-
-    if (props.listadoPNF === null) {
-        toast.loading('Obteniendo listado de Programas...')
-    }
-
-    else if (props.listadoPNF !== null && props.listadPNF?.length === 0) {
-        toast.info('No existen carreras, no es posible inscribir la carga.')
-        router.push('/')
-    }
-
-    if (props.listadoDocentes === null) {
-        toast.loading('Obteniendo listado de docentes...')
-    }
-
-    else if (props.listadoDocentes !== null && props.listadoDocentes?.length === 0) {
-        toast.info('No existen docentes inscritos, no es posible inscribir a un docente.')
-        router.push('/')
-    }
+    }   
 
     return (
         <CargaForm
@@ -136,23 +129,8 @@ const RegistrarCarga = (props) => {
             validate={validate}
             Form={Form}
             Errors={Errors}
-            PNFListado={props.listadoPNF}
-            DocenteListado={props.listadoDocentes}
         />
     )
-}
-
-export const getServerSideProps = async (context) => {
-
-    const listadoDeCarreras = await prisma.pNF.findMany()
-    const listadoDeProfesores = await prisma.docente.findMany({ select: { nombre: true, apellido: true, id: true }, where: { activo: true } })
-
-    return {
-        props: {
-            listadoPNF: listadoDeCarreras,
-            listadoDocentes: listadoDeProfesores
-        }
-    }
 }
 
 export default RegistrarCarga

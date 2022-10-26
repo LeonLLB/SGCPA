@@ -14,7 +14,7 @@ type Carga struct {
 	Horario1  string  `gorm:"notNull" json:"horario1"`
 	Horario2  string  `json:"horario2,omitempty"`
 	Aula      uint    `gorm:"notNull" json:"aula"`
-	Docente   Docente `gorm:"references:ID" json:"docente"`
+	Docente   Docente `gorm:"references:ID" json:"docente,omitempty"`
 	// docente Docente @relation(fields:[docenteID],references:[id])
 }
 

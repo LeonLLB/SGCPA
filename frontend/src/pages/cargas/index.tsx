@@ -1,6 +1,5 @@
-import { useRouter } from "next/router"
 import { useState, useEffect, MouseEvent } from "react"
-import { toast } from "react-toastify"
+import { useNavigate } from "react-router-dom"
 import DiaSelect from "../../components/form/DiaSelect"
 import DocentesSelect from "../../components/form/DocenteSelect"
 import PNFSelect from "../../components/form/PNFSelect"
@@ -10,15 +9,16 @@ import Modal from "../../components/ui/Modal"
 import trayectoSwitch from "../../helpers/trayectoSwitch"
 import useElementAsyncTransition from "../../hooks/useElementAsyncTransition"
 import useForm from "../../hooks/useForm"
-import Carga from "../../interfaces/Carga"
-import prisma from "../../prismaClient"
+import { database } from "../../../wailsjs/go/models"
+import * as CargaController from "../../../wailsjs/go/database/Carga"
+import cogoToast from "cogo-toast"
+import { translateDbError } from "../../helpers/dbError"
 
-const CargasAcademicasMain = (props) => {
-  const primerListado = props.listado
+const CargasAcademicasMain = () => {
+  const navigate = useNavigate()
 
-  const [listado, setListado] = useState<Carga[]>([])
-  const router = useRouter()
-  const [CargaId, setCargaId] = useState(null)
+  const [listado, setListado] = useState<database.Carga[]>([])
+  const [CargaId, setCargaId] = useState<number | null>(null)
   const confirmModalState = useElementAsyncTransition(200)
 
   const [Form, onInputChange, reset] = useForm({
@@ -31,9 +31,7 @@ const CargasAcademicasMain = (props) => {
   })
 
   useEffect(() => {
-    if(primerListado !== null){
-      setListado(primerListado)
-    }
+    filterCargas(true)
   }, [])
 
   const onCargaPreDelete = (event:MouseEvent,id:number) => {
@@ -43,46 +41,29 @@ const CargasAcademicasMain = (props) => {
 	}
 
 	const onCargaDelete = () => {
-		const toastReference = toast.loading('Eliminando carga...')
-    fetch('/api/cargas',{
-			method:'DELETE',
-			headers:{
-				'Content-Type':'application/json'
-			},
-			body:JSON.stringify({id:CargaId})
-		})
-		.then(res=>res.json())
-		.then(res=>{
-			if(res.isOk){
-				toast.update(toastReference,{closeButton:true,closeOnClick:true,render:res.result,type:'success',isLoading:false,autoClose:4000})
-        filterCargas(true)
-        reset()
-      }
-			else{
-				toast.update(toastReference,{closeButton:true,closeOnClick:true,render:res.result,type:'error',isLoading:false,autoClose:4000})
-			}
-			setCargaId(0)			
-			confirmModalState.Interaction()
-		})
+		const toast = cogoToast.loading('Eliminando carga...')
+    CargaController.Delete(CargaId!)
+    .then(result=>{
+      toast.hide!()
+        setCargaId(0)
+        confirmModalState.Interaction()
+        if (result['ok']) {
+          reset()
+          cogoToast.success('Carga eliminada con exito!')
+          filterCargas(true)
+          return
+        }
+        cogoToast.error(translateDbError(result['error']['Code']))
+    })
 	}
 
   const filterCargas = (clean: boolean = false) => {
-    const URL = (clean === false) ?
-    `/api/cargas?periodo=${Form.periodo}&pnf=${Form.pnf}&trayecto=${Form.trayecto}&docente=${Form.docenteID}&dia=${Form.dia}` :
-    `/api/cargas?periodo=&pnf=&trayecto=&docente=&dia`;
-    const toastReference = toast.loading('Filtrando cargas...')
-		fetch(URL)
-		.then(res=>res.json())
-		.then(res=>{
-			if(res.isOk){
-        setListado(res.data)
-        console.log(res.data)
-				toast.update(toastReference,{closeButton:true,closeOnClick:true,render:'Operación culminada',type:'info',isLoading:false,autoClose:4000})
-			}
-			else{
-				toast.update(toastReference,{closeButton:true,closeOnClick:true,render:res.result,type:'error',isLoading:false,autoClose:4000})
-			}
-		})
+    if(clean){
+      CargaController.GetAll().then(setListado)
+      return
+    }
+    //TODO Filtrado
+    CargaController.GetAll().then(setListado)    
   }
 
   return (
@@ -108,7 +89,6 @@ const CargasAcademicasMain = (props) => {
               error={null}
               isCol={true}
               label="PNF"
-              pnfList={(props.listadoPNF !== null && props.listadoPNF?.length > 0) ? props.listadoPNF : []}
               required={false}
             />
             <TrayectoSelect
@@ -124,7 +104,6 @@ const CargasAcademicasMain = (props) => {
               onInputChange={onInputChange}
               error={null}
               isCol={true}
-              docenteList={(props.listadoDocentes !== null && props.listadoDocentes?.length > 0) ? props.listadoDocentes : []}
               required={false}
             />            
             <DiaSelect
@@ -136,12 +115,12 @@ const CargasAcademicasMain = (props) => {
               required={false}
             />
             <div className="flex flex-row justify-evenly col-span-2 md:col-span-3">
-              <button className='btn-info-primary' onClick={()=>{router.push('/cargas/registrar')}}>Añadir carga</button>
+              <button className='btn-info-primary' onClick={()=>{navigate('/cargas/registrar',{replace:true})}}>Añadir carga</button>
               <button className='btn-info-primary' onClick={()=>{reset();filterCargas(true)}}>Limpiar filtros</button>
               <button className='btn-info-primary' onClick={()=>{filterCargas()}}> Filtrar cargas </button>
             </div>
           </div>
-          <div className='overflow-x-auto xl:w-auto w-11/12 pb-2'>
+          <div className='overflow-x-auto pb-2'>
             <table className="h-full text-center border-collapse border-2 border-gray-500">
               <thead>
                 <tr>
@@ -159,24 +138,24 @@ const CargasAcademicasMain = (props) => {
                     <td className="td-pnf">{carga.periodo}</td>
                     <td className="td-pnf">{carga.pnf}</td>
                     <td className="td-pnf font-serif"> {trayectoSwitch(carga.trayecto)}</td>
-                    <td className="td-pnf">{carga.docente.nombre} {carga.docente.apellido}</td>
+                    <td className="td-pnf">{carga.docente!.nombre} {carga.docente!.apellido}</td>
                     <td className="td-pnf">
                       <ul className="list-disc px-4">
                         <li>
                           {carga.horario1.split('T')[0]} {carga.horario1.split('T')[1].split('-')[0]} - {carga.horario1.split('T')[1].split('-')[1]}
                         </li>
-                        { carga.horario2 !== null &&
+                        { carga.horario2 &&
                           <li>
-                            {carga.horario2.split('T')[0]} {carga.horario2.split('T')[1].split('-')[0]} - {carga.horario2.split('T')[1].split('-')[1]}
+                            {carga.horario2!.split('T')[0]} {carga.horario2!.split('T')[1].split('-')[0]} - {carga.horario2!.split('T')[1].split('-')[1]}
                           </li>
                         }
                       </ul>
                     </td>
                     <td className="td-pnf font-semibold">
-                      <button onClick={(e)=>{router.push(`/cargas/modificar/${carga.id}`)}}>
+                      <button onClick={()=>{navigate(`/cargas/modificar/${carga.id}`,{replace:true})}}>
                         <span className="material-icons text-3xl">edit</span>
                       </button>
-                      <button onClick={(e)=>{onCargaPreDelete(e,carga.id)}}>
+                      <button onClick={(e)=>{onCargaPreDelete(e,carga.id!)}}>
                         <span className="material-icons text-3xl">delete</span>
                       </button>
                     </td>
@@ -207,37 +186,3 @@ const CargasAcademicasMain = (props) => {
 }
 
 export default CargasAcademicasMain
-
-export const getServerSideProps = async (context) =>{
-
-  const ultimaCarga = await prisma.cargaAcademica.findFirst({
-    orderBy:{
-      periodo:'desc'
-    },
-    select:{
-      periodo:true
-    }
-  })
-
-  const listadoCargas = await prisma.cargaAcademica.findMany({
-    include:{
-      docente:true
-    },
-    orderBy:[
-      {pnf:'desc'},
-      {trayecto:'asc'}
-    ],
-    where:{
-      periodo:ultimaCarga.periodo
-    }
-  })
-  const listadoDocentes = await prisma.docente.findMany()
-  const listadoPNF = await prisma.pNF.findMany()
-   return {
-       props: {
-        listado:listadoCargas,
-        listadoDocentes,
-        listadoPNF
-        }
-    }
-}

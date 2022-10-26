@@ -36,7 +36,7 @@ export namespace database {
 	    horario1: string;
 	    horario2?: string;
 	    aula: number;
-	    docente: Docente;
+	    docente?: Docente;
 	
 	    static createFrom(source: any = {}) {
 	        return new Carga(source);

@@ -27,6 +27,11 @@ function App() {
                   <Route path="registrar" element={<p.AddDocente/>}/>
                   <Route path="modificar/:docenteId" element={<p.DocenteModificar/>}/>                
                 </Route>
+                <Route path="/cargas">
+                  <Route index element={<p.CargasAcademicasMain/>}/>                
+                  <Route path="registrar" element={<p.RegistrarCarga/>}/>
+                  <Route path="modificar/:cargaId" element={<p.ModificarCarga/>}/>                
+                </Route>
               </Routes>
           </div>
         </div> 
